@@ -1,0 +1,369 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+import os
+import re
+import shutil
+import sys
+import urllib.request
+from pathlib import Path
+
+DEFAULT_WORKFLOW = ["planner", "architect", "coder", "reviewer", "tester", "debugger", "refactor", "docs"]
+DEFAULT_CONFIG = {
+    "provider": "groq",
+    "model": "llama3-70b",
+    "agentsPath": ".ai-agents",
+    "maxSteps": 10,
+    "historyPath": ".ai-agent-history",
+    "temperature": 0.2,
+    "applyChanges": True,
+}
+PROVIDER_ENV_KEYS = {"openai": "OPENAI_API_KEY", "groq": "GROQ_API_KEY", "openrouter": "OPENROUTER_API_KEY", "ollama": None}
+OPENAI_ENDPOINTS = {
+    "openai": "https://api.openai.com/v1/chat/completions",
+    "groq": "https://api.groq.com/openai/v1/chat/completions",
+    "openrouter": "https://openrouter.ai/api/v1/chat/completions",
+}
+IGNORE_DIRS = {".git", "node_modules", ".ai-agent-history", "dist", "build", "coverage", ".venv", "venv", "__pycache__"}
+LANGUAGE_MAP = {".js": "javascript", ".mjs": "javascript", ".cjs": "javascript", ".ts": "typescript", ".tsx": "typescript", ".jsx": "javascript", ".py": "python", ".java": "java", ".go": "go", ".rs": "rust", ".rb": "ruby", ".php": "php", ".md": "markdown", ".json": "json", ".sh": "shell"}
+FRAMEWORK_HINTS = {"react": "React", "next": "Next.js", "express": "Express", "fastify": "Fastify", "nest": "NestJS", "vue": "Vue", "nuxt": "Nuxt", "svelte": "Svelte", "flask": "Flask", "django": "Django", "fastapi": "FastAPI"}
+
+
+def agent_home() -> Path:
+    env_home = os.environ.get("AI_AGENT_HOME")
+    if env_home:
+        return Path(env_home).expanduser().resolve()
+    return Path(__file__).resolve().parents[1]
+
+
+def load_env_files(*paths: Path) -> dict:
+    values = {}
+    for env_path in paths:
+        if not env_path.exists():
+            continue
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            values[key.strip()] = value.strip().strip('"').strip("'")
+    values.update(os.environ)
+    return values
+
+
+def extract_json_block(markdown_path: Path) -> dict:
+    if not markdown_path.exists():
+        return dict(DEFAULT_CONFIG)
+    text = markdown_path.read_text(encoding="utf-8")
+    match = re.search(r"```json\s*(\{[\s\S]*?\})\s*```", text, re.IGNORECASE)
+    if not match:
+        return dict(DEFAULT_CONFIG)
+    return {**DEFAULT_CONFIG, **json.loads(match.group(1))}
+
+
+def load_config(root: Path) -> dict:
+    config = extract_json_block(root / "config" / "agent.config.md")
+    env = load_env_files(root / ".env")
+    if env.get("AI_AGENT_PROVIDER"):
+        config["provider"] = env["AI_AGENT_PROVIDER"]
+    if env.get("AI_AGENT_MODEL"):
+        config["model"] = env["AI_AGENT_MODEL"]
+    if env.get("AI_AGENT_MAX_STEPS"):
+        config["maxSteps"] = int(env["AI_AGENT_MAX_STEPS"])
+    if env.get("AI_AGENT_APPLY_CHANGES"):
+        config["applyChanges"] = env["AI_AGENT_APPLY_CHANGES"].lower() == "true"
+    return config
+
+
+def load_agents(root: Path, agents_path: str):
+    agents_dir = root / agents_path
+    if not agents_dir.exists():
+        return []
+    agents = []
+    for file_path in sorted(agents_dir.glob("*.md")):
+        text = file_path.read_text(encoding="utf-8")
+        title_match = re.search(r"^#\s+(.+)$", text, re.MULTILINE)
+        agents.append({
+            "id": file_path.stem,
+            "title": title_match.group(1).strip() if title_match else file_path.stem,
+            "instructions": text,
+            "path": str(file_path.relative_to(root)),
+        })
+    by_id = {agent["id"]: agent for agent in agents}
+    ordered = [by_id[name] for name in DEFAULT_WORKFLOW if name in by_id]
+    extras = [agent for agent in agents if agent["id"] not in DEFAULT_WORKFLOW]
+    return ordered + extras
+
+
+def analyze_project(project_dir: Path) -> dict:
+    files, directories = [], []
+    for current, dirnames, filenames in os.walk(project_dir):
+        dirnames[:] = sorted([name for name in dirnames if name not in IGNORE_DIRS])
+        relative_dir = Path(current).relative_to(project_dir)
+        if str(relative_dir) != ".":
+            directories.append(str(relative_dir))
+        for filename in sorted(filenames):
+            rel_path = (relative_dir / filename) if str(relative_dir) != "." else Path(filename)
+            files.append(str(rel_path))
+
+    languages = sorted({LANGUAGE_MAP.get(Path(file).suffix.lower()) for file in files if LANGUAGE_MAP.get(Path(file).suffix.lower())})
+    dependencies = detect_dependencies(project_dir)
+    frameworks = detect_frameworks(files, dependencies)
+    important = []
+    for candidate in ["README.md", "package.json", "pyproject.toml", "requirements.txt", "go.mod", "Cargo.toml"]:
+        path = project_dir / candidate
+        if path.exists() and path.is_file():
+            preview = "\n".join(path.read_text(encoding="utf-8", errors="ignore").splitlines()[:20])
+            important.append({"path": candidate, "preview": preview})
+    return {
+        "rootDir": str(project_dir),
+        "languages": languages,
+        "frameworks": frameworks,
+        "dependencies": dependencies,
+        "structure": ["."] + sorted(directories) + sorted(files)[:250],
+        "importantFiles": important[:5],
+        "stats": {"files": len(files), "directories": len(directories)},
+    }
+
+
+def detect_dependencies(project_dir: Path):
+    dependencies = set()
+    package_json = project_dir / "package.json"
+    if package_json.exists():
+        try:
+            data = json.loads(package_json.read_text(encoding="utf-8"))
+            dependencies.update((data.get("dependencies") or {}).keys())
+            dependencies.update((data.get("devDependencies") or {}).keys())
+        except Exception:
+            pass
+    requirements = project_dir / "requirements.txt"
+    if requirements.exists():
+        for line in requirements.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#"):
+                dependencies.add(re.split(r"[<>=]", line)[0].strip())
+    pyproject = project_dir / "pyproject.toml"
+    if pyproject.exists():
+        text = pyproject.read_text(encoding="utf-8", errors="ignore")
+        for match in re.findall(r'"([A-Za-z0-9_.-]+)\s*[<>=]?', text):
+            if match.lower() not in {"python", "name", "version"}:
+                dependencies.add(match)
+    return sorted(dependencies)
+
+
+def detect_frameworks(files, dependencies):
+    frameworks = {FRAMEWORK_HINTS[dep] for dep in dependencies if dep in FRAMEWORK_HINTS}
+    if "next.config.js" in files:
+        frameworks.add("Next.js")
+    if "vite.config.js" in files or "vite.config.ts" in files:
+        frameworks.add("Vite")
+    if "manage.py" in files:
+        frameworks.add("Django")
+    return sorted(frameworks)
+
+
+def recent_history(project_dir: Path, history_path: str):
+    history_dir = project_dir / history_path
+    if not history_dir.exists():
+        return []
+    files = sorted(history_dir.glob("*.json"))[-3:]
+    results = []
+    for file_path in files:
+        try:
+            parsed = json.loads(file_path.read_text(encoding="utf-8"))
+            results.append({"task": parsed.get("task"), "startedAt": parsed.get("startedAt"), "summaries": [step.get("summary") for step in parsed.get("steps", [])]})
+        except Exception:
+            continue
+    return results
+
+
+def request_json(url: str, headers: dict, payload: dict) -> dict:
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
+    with urllib.request.urlopen(req, timeout=120) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def provider_generate(config: dict, env: dict, system_prompt: str, user_prompt: str) -> str:
+    provider = config["provider"]
+    model = config["model"]
+    if provider == "ollama":
+        data = request_json(
+            "http://127.0.0.1:11434/api/chat",
+            {"Content-Type": "application/json"},
+            {"model": model, "stream": False, "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]},
+        )
+        return ((data.get("message") or {}).get("content") or "").strip()
+
+    api_key_name = PROVIDER_ENV_KEYS.get(provider)
+    api_key = env.get(api_key_name or "")
+    if not api_key or provider not in OPENAI_ENDPOINTS:
+        raise RuntimeError(f"Provider '{provider}' is not configured.")
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    if provider == "openrouter":
+        headers["HTTP-Referer"] = "https://local.ai-agent"
+    data = request_json(
+        OPENAI_ENDPOINTS[provider],
+        headers,
+        {"model": model, "temperature": config.get("temperature", 0.2), "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]},
+    )
+    return (((data.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
+
+
+def normalize_agent_output(raw: str, agent_id: str) -> dict:
+    match = re.search(r"```(?:json)?\s*([\s\S]*?)```", raw, re.IGNORECASE)
+    candidate = match.group(1).strip() if match else raw.strip()
+    if not match:
+        start, end = candidate.find("{"), candidate.rfind("}")
+        if start != -1 and end > start:
+            candidate = candidate[start : end + 1]
+    try:
+        parsed = json.loads(candidate)
+        return {
+            "agentId": agent_id,
+            "summary": parsed.get("summary") or f"Completed {agent_id}",
+            "files": parsed.get("files") if isinstance(parsed.get("files"), list) else [],
+            "notes": parsed.get("notes") if isinstance(parsed.get("notes"), list) else [],
+            "issues": parsed.get("issues") if isinstance(parsed.get("issues"), list) else [],
+        }
+    except Exception:
+        return {"agentId": agent_id, "summary": raw.strip() or f"Completed {agent_id}", "files": [], "notes": ["Response was not valid JSON."], "issues": []}
+
+
+def apply_file_actions(project_dir: Path, file_actions):
+    applied = []
+    project_root = project_dir.resolve()
+    for item in file_actions:
+        relative = item.get("path")
+        action = item.get("action", "modify")
+        if not relative:
+            continue
+        absolute = (project_root / relative).resolve()
+        if absolute != project_root and project_root not in absolute.parents:
+            raise RuntimeError(f"Refusing to write outside project root: {relative}")
+        if action == "delete":
+            if absolute.is_dir():
+                shutil.rmtree(absolute, ignore_errors=True)
+            else:
+                absolute.unlink(missing_ok=True)
+        else:
+            absolute.parent.mkdir(parents=True, exist_ok=True)
+            absolute.write_text(item.get("content", ""), encoding="utf-8")
+        applied.append({"path": relative, "action": action})
+    return applied
+
+
+def build_prompt(agent: dict, task: str, analysis: dict, previous_outputs, memory) -> str:
+    return (
+        f"Agent instructions:\n{agent['instructions']}\n\n"
+        f"User task:\n{task}\n\n"
+        f"Project analysis:\n{json.dumps(analysis, indent=2)}\n\n"
+        f"Previous agent outputs:\n{json.dumps(previous_outputs, indent=2)}\n\n"
+        f"Recent run memory:\n{json.dumps(memory, indent=2)}\n\n"
+        "Return JSON only with keys: summary, files, notes, issues.\n"
+        "Each file item must include path, action(create|modify|delete), content.\n"
+        "If no file changes are needed, return files as an empty array."
+    )
+
+
+def save_history(project_dir: Path, history_path: str, payload: dict) -> Path:
+    history_dir = project_dir / history_path
+    history_dir.mkdir(parents=True, exist_ok=True)
+    file_path = history_dir / f"run-{payload['startedAt'].replace(':', '-').replace('.', '-')}.json"
+    file_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return file_path
+
+
+def command_agents(root: Path, config: dict):
+    for index, agent in enumerate(load_agents(root, config["agentsPath"]), start=1):
+        print(f"{index}. {agent['id']} -> {agent['title']} ({agent['path']})")
+
+
+def command_analyze(project_dir: Path):
+    print(json.dumps(analyze_project(project_dir), indent=2))
+
+
+def command_doctor(root: Path, project_dir: Path, config: dict):
+    env = load_env_files(root / ".env", project_dir / ".env")
+    issues = []
+    if sys.version_info < (3, 8):
+        issues.append("Python 3.8+ is required.")
+    if not shutil.which("python3"):
+        issues.append("python3 was not found in PATH.")
+    if not (root / config["agentsPath"]).exists():
+        issues.append(f"Agents path not found: {config['agentsPath']}")
+    if not load_agents(root, config["agentsPath"]):
+        issues.append("No Markdown agents were loaded.")
+    key_name = PROVIDER_ENV_KEYS.get(config["provider"])
+    if key_name and not env.get(key_name):
+        issues.append(f"Missing {key_name} for provider '{config['provider']}'.")
+    print("=== Doctor report ===")
+    print(f"[info] Agent home: {root}")
+    print(f"[info] Project dir: {project_dir}")
+    print(f"[info] Provider: {config['provider']}")
+    print(f"[info] Model: {config['model']}")
+    print(f"[info] Agents loaded: {len(load_agents(root, config['agentsPath']))}")
+    if issues:
+        for issue in issues:
+            print(f"[error] {issue}")
+        return 1
+    print("[ok] Configuration looks good.")
+    return 0
+
+
+def command_run(root: Path, project_dir: Path, config: dict, task: str, apply_override=None):
+    env = load_env_files(root / ".env", project_dir / ".env")
+    agents = load_agents(root, config["agentsPath"])
+    analysis = analyze_project(project_dir)
+    memory = recent_history(project_dir, config["historyPath"])
+    steps = []
+    apply_changes = config["applyChanges"] if apply_override is None else apply_override
+    for agent in agents[: int(config["maxSteps"] )]:
+        print(f"\n=== Running {agent['id']} ===")
+        raw = provider_generate(config, env, f"You are {agent['title']}. Follow the Markdown instructions exactly and return JSON only.", build_prompt(agent, task, analysis, steps, memory))
+        output = normalize_agent_output(raw, agent["id"])
+        output["applied"] = apply_file_actions(project_dir, output["files"]) if apply_changes and output["files"] else []
+        steps.append(output)
+        if output["applied"]:
+            analysis = analyze_project(project_dir)
+        print(f"[info] {output['summary']}")
+    payload = {"task": task, "startedAt": __import__('datetime').datetime.utcnow().isoformat() + 'Z', "analysis": analysis, "steps": steps}
+    history_file = save_history(project_dir, config["historyPath"], payload)
+    print("\n=== Run complete ===")
+    print(f"[ok] Agents executed: {len(steps)}")
+    print(f"[info] History file: {history_file}")
+    return 0
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(prog="ai-agent", description="Markdown-driven autonomous agent CLI")
+    parser.add_argument("command", choices=["run", "analyze", "agents", "doctor"])
+    parser.add_argument("task", nargs="?")
+    parser.add_argument("--project", default=os.getcwd(), help="Target project directory. Defaults to the current directory.")
+    parser.add_argument("--dry-run", action="store_true", help="Do not apply returned file actions during run.")
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+    root = agent_home()
+    project_dir = Path(args.project).expanduser().resolve()
+    config = load_config(root)
+    if args.command == "agents":
+        command_agents(root, config)
+        return 0
+    if args.command == "analyze":
+        command_analyze(project_dir)
+        return 0
+    if args.command == "doctor":
+        return command_doctor(root, project_dir, config)
+    if args.command == "run":
+        if not args.task:
+            print("[error] Please provide a task, e.g. ai-agent run \"Create login API\"", file=sys.stderr)
+            return 1
+        return command_run(root, project_dir, config, args.task, apply_override=False if args.dry_run else None)
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
