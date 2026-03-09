@@ -1,0 +1,237 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Length 2764 >>
+stream
+BT /F2 18 Tf 1 0 0 1 150.5 728.0 Tm (HR Autonomous Agent Architecture) Tj ET
+BT /F1 11 Tf 1 0 0 1 124.5 704.0 Tm (HR-operations-first reasoning, execution, recovery, and reflection) Tj ET
+0 G 0.8 w
+54.0 691.0 m 558.0 691.0 l S
+BT /F2 12 Tf 1 0 0 1 54.0 675.0 Tm (1. Overview) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 657.0 Tm (The agent is designed as a controlled autonomous workflow for HR operations. It interprets) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 644.0 Tm (goals in business terms first, prepares the target environment, inspects relevant) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 631.0 Tm (application logic, executes the smallest safe action, verifies the outcome, and) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 618.0 Tm (continuously improves through recorded memory and reflection.) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 599.0 Tm (2. Key Features) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 581.0 Tm (- Business-operation-first interpretation of user goals.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 566.0 Tm (- Warm-start behavior that reuses known context before broad discovery.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 551.0 Tm (- Mandatory reasoning and action justification before mutation.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 536.0 Tm (- Targeted system inspection to support safe execution.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 521.0 Tm (- Bounded retry behavior with explicit recovery logic.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 506.0 Tm (- Persistent memory, logs, and post-run reflection.) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 485.0 Tm (3. Design Goals) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 467.0 Tm (- Make HR outcomes the primary decision lens before treating a request as an) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 454.0 Tm (  engineering task.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 439.0 Tm (- Start quickly by using configured startup data and warm context by default.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 424.0 Tm (- Prefer narrow, reversible operations with verification after every meaningful step.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 409.0 Tm (- Escalate rather than guess when confidence or evidence is insufficient.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 394.0 Tm (- Retain lessons across runs so later execution becomes safer and faster.) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 373.0 Tm (4. Core Operating Principles) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 355.0 Tm (- Summary-only inspection output during normal operation.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 340.0 Tm (- Targeted discovery before broad rediscovery.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 325.0 Tm (- Read-first validation before write actions when possible.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 310.0 Tm (- Reflection after every completed or terminally failed run.) Tj ET
+0 G 0.8 w
+54.0 34.0 m 558.0 34.0 l S
+BT /F1 9 Tf 1 0 0 1 524.0 20.0 Tm (Page 1) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3933 >>
+stream
+BT /F2 18 Tf 1 0 0 1 150.5 728.0 Tm (HR Autonomous Agent Architecture) Tj ET
+BT /F1 11 Tf 1 0 0 1 207.0 704.0 Tm (System structure and core components) Tj ET
+0 G 0.8 w
+54.0 691.0 m 558.0 691.0 l S
+BT /F2 12 Tf 1 0 0 1 54.0 675.0 Tm (5. System Architecture) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 657.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 646.0 Tm (| User Goal / CLI Invocation  |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 635.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 624.0 Tm (              |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 613.0 Tm (              v) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 602.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 591.0 Tm (| Workflow Contract          |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 580.0 Tm (| Runtime Configuration      |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 569.0 Tm (| Strategy + Safety Rules    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 558.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 547.0 Tm (              |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 536.0 Tm (              v) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 525.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 514.0 Tm (| Warm Start + Session Prep  |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 503.0 Tm (+-----------------------------+) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 492.0 Tm (              |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 481.0 Tm (       -----------------------------) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 470.0 Tm (       |             |             |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 459.0 Tm (       v             v             v) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 448.0 Tm (   Reasoning     Discovery     Execution) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 437.0 Tm (       |                           |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 426.0 Tm (       --------> Verification <----) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 415.0 Tm (                      |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 404.0 Tm (                 Recovery) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 393.0 Tm (                      |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 382.0 Tm (             Reflection + Memory) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 363.0 Tm (6. Component Responsibilities) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 345.0 Tm (Component           Responsibility) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 334.0 Tm (------------------  ----------------------------------------------------) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 323.0 Tm (Workflow Layer      Defines the governing contract for runtime behavior.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 312.0 Tm (Config Layer        Supplies startup behavior, environment assumptions,) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 301.0 Tm (                    defaults, and safety settings.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 290.0 Tm (Reasoning Agent     Interprets intent and produces the safest execution) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 279.0 Tm (                    path.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 268.0 Tm (Discovery Agent     Refreshes only the technical facts needed for the) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 257.0 Tm (                    active goal.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 246.0 Tm (Execution Agent     Performs one justified action at a time and verifies) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 235.0 Tm (                    the outcome.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 224.0 Tm (Recovery Agent      Diagnoses failures, applies narrow corrections, and) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 213.0 Tm (                    retries only when justified.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 202.0 Tm (Reflection Agent    Evaluates results and improves future heuristics.) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 191.0 Tm (State & Memory      Stores workflow progress, history, and operational) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 180.0 Tm (                    evidence.) Tj ET
+0 G 0.8 w
+54.0 34.0 m 558.0 34.0 l S
+BT /F1 9 Tf 1 0 0 1 524.0 20.0 Tm (Page 2) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 3368 >>
+stream
+BT /F2 18 Tf 1 0 0 1 150.5 728.0 Tm (HR Autonomous Agent Architecture) Tj ET
+BT /F1 11 Tf 1 0 0 1 212.5 704.0 Tm (Runtime flow and decision behavior) Tj ET
+0 G 0.8 w
+54.0 691.0 m 558.0 691.0 l S
+BT /F2 12 Tf 1 0 0 1 54.0 675.0 Tm (7. Runtime Workflow) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 657.0 Tm (Receive Goal) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 646.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 635.0 Tm (Load Workflow Contract and Runtime Settings) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 624.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 613.0 Tm (Load Warm State and Known Context) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 602.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 591.0 Tm (Validate Service Availability and Session State) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 580.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 569.0 Tm (Reasoning Agent: classify goal and choose safest path) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 558.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 547.0 Tm (Discovery Agent: inspect only the modules needed now) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 536.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 525.0 Tm (Execution Agent: perform smallest justified action) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 514.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 503.0 Tm (Verification: confirm response and state change) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 492.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 481.0 Tm (Recovery Agent: retry only if failure is recoverable) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 470.0 Tm (    |) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 459.0 Tm (Reflection Agent: store lessons for future runs) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 440.0 Tm (8. Confidence Model) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 422.0 Tm (- High confidence: proceed with normal safeguards because the business meaning,) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 409.0 Tm (  module, and action path are all supported.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 394.0 Tm (- Medium confidence: proceed only with narrow and reversible actions plus explicit) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 381.0 Tm (  verification.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 366.0 Tm (- Low confidence: inspect further or escalate instead of guessing.) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 345.0 Tm (9. Example Reasoning Snapshot) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 327.0 Tm (Goal: approve pending attendance requests for last week) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 316.0 Tm (Task Type: attendance operations) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 305.0 Tm (Confidence: Medium) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 294.0 Tm (Relevant Areas: attendance, approval flow, authentication) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 283.0 Tm (Inferred Action Path: authenticate -> confirm scope ->) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 272.0 Tm (                      approve eligible requests -> verify) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 261.0 Tm (Strategy:) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 250.0 Tm (1. Validate configured backend and active session) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 239.0 Tm (2. Confirm attendance approval workflow) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 228.0 Tm (3. Execute the smallest safe approval action) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 217.0 Tm (4. Verify the post-action state) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 206.0 Tm (5. Record the result, memory update, and reflection) Tj ET
+0 G 0.8 w
+54.0 34.0 m 558.0 34.0 l S
+BT /F1 9 Tf 1 0 0 1 524.0 20.0 Tm (Page 3) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 3420 >>
+stream
+BT /F2 18 Tf 1 0 0 1 150.5 728.0 Tm (HR Autonomous Agent Architecture) Tj ET
+BT /F1 11 Tf 1 0 0 1 149.2 704.0 Tm (Configured profile, guardrails, and completion guarantees) Tj ET
+0 G 0.8 w
+54.0 691.0 m 558.0 691.0 l S
+BT /F2 12 Tf 1 0 0 1 54.0 675.0 Tm (10. Configured Operating Profile) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 657.0 Tm (Setting                   Value) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 646.0 Tm (------------------------  ----------------------------------------------------) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 635.0 Tm (Entry Command             agent run "<goal>") Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 624.0 Tm (Default Persona           hr operations specialist) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 613.0 Tm (Goal Interpretation       business-operation-first) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 602.0 Tm (Startup Mode              configured-path warm-start) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 591.0 Tm (Runtime Shell             powershell) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 580.0 Tm (Warm Cache Reuse          enabled when the active target still matches) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 569.0 Tm (Discovery Preference      targeted refresh before any broad rediscovery) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 558.0 Tm (Authentication            required before task execution) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 547.0 Tm (Retry Limit               3) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 536.0 Tm (Safe Mode                 enabled) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 525.0 Tm (Bulk Operations           disabled unless reasoning marks them explicitly safe) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 514.0 Tm (CLI Visibility            summary-only during inspection) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 503.0 Tm (Action Reasoning          required before every execution step) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 492.0 Tm (Memory Update             after each task and major state transition) Tj ET
+BT /F3 8.8 Tf 1 0 0 1 54.0 481.0 Tm (Reflection                required after completion or terminal failure) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 464.0 Tm (11. Risk and Recovery Guardrails) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 446.0 Tm (- Prefer read-only verification before any write action.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 431.0 Tm (- Avoid broad or bulk changes unless the reasoning step explicitly justifies them.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 416.0 Tm (- Retry only when the failure is plausibly recoverable and something meaningful) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 403.0 Tm (  changes.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 388.0 Tm (- Escalate when evidence is conflicting, destructive side effects appear, or) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 375.0 Tm (  confidence remains too low.) Tj ET
+BT /F2 12 Tf 1 0 0 1 54.0 354.0 Tm (12. Completion Guarantees) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 336.0 Tm (- A run ends only after it reaches a terminal outcome such as completed, failed, or) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 323.0 Tm (  escalated.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 308.0 Tm (- Execution history, failure records, state tracking, task memory, and reflection must) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 295.0 Tm (  all be updated.) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 280.0 Tm (- Recorded lessons are expected to influence later runs so the system becomes safer) Tj ET
+BT /F1 10.5 Tf 1 0 0 1 54.0 267.0 Tm (  and more consistent over time.) Tj ET
+0 G 0.8 w
+54.0 34.0 m 558.0 34.0 l S
+BT /F1 9 Tf 1 0 0 1 524.0 20.0 Tm (Page 4) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+xref
+0 14
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000141 00000 n 
+0000000211 00000 n 
+0000000286 00000 n 
+0000000354 00000 n 
+0000003169 00000 n 
+0000003315 00000 n 
+0000007299 00000 n 
+0000007445 00000 n 
+0000010865 00000 n 
+0000011013 00000 n 
+0000014485 00000 n 
+trailer
+<< /Size 14 /Root 1 0 R >>
+startxref
+14633
+%%EOF

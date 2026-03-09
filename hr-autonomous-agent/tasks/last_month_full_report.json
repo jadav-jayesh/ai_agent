@@ -1,0 +1,825 @@
+{
+  "generatedAt": "2026-03-08T16:19:51.744Z",
+  "actor": {
+    "id": 48,
+    "role": "hr",
+    "organizationId": 2
+  },
+  "scope": {
+    "startDate": "2026-02-01T00:00:00.000Z",
+    "endDate": "2026-02-28T23:59:59.999Z",
+    "monthStart": "2026-02-01",
+    "monthEnd": "2026-02-28"
+  },
+  "reportSummary": {
+    "totalTime": "76:10",
+    "autoTime": "76:10",
+    "manualTime": "0:00",
+    "totalMembers": 19,
+    "totalProjects": 8
+  },
+  "reportRowsCount": 23,
+  "report": {
+    "groupBy": "day",
+    "rows": [
+      {
+        "userId": 26,
+        "userName": "Shruti Kapatel",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "7:48",
+        "autoTime": "7:48",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-26",
+            "total": "1:05",
+            "auto": "1:05",
+            "manual": "0:00",
+            "_total": 3900
+          },
+          {
+            "date": "2026-02-25",
+            "total": "0:02",
+            "auto": "0:02",
+            "manual": "0:00",
+            "_total": 120
+          },
+          {
+            "date": "2026-02-24",
+            "total": "0:02",
+            "auto": "0:02",
+            "manual": "0:00",
+            "_total": 120
+          },
+          {
+            "date": "2026-02-20",
+            "total": "0:02",
+            "auto": "0:02",
+            "manual": "0:00",
+            "_total": 120
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:49",
+            "auto": "0:49",
+            "manual": "0:00",
+            "_total": 2940
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:06",
+            "auto": "0:06",
+            "manual": "0:00",
+            "_total": 360
+          },
+          {
+            "date": "2026-02-06",
+            "total": "0:41",
+            "auto": "0:41",
+            "manual": "0:00",
+            "_total": 2460
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:35",
+            "auto": "0:35",
+            "manual": "0:00",
+            "_total": 2100
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:26",
+            "auto": "4:26",
+            "manual": "0:00",
+            "_total": 15960
+          }
+        ],
+        "_totalSeconds": 28080
+      },
+      {
+        "userId": 24,
+        "userName": "Satish Yadav",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "6:39",
+        "autoTime": "6:39",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-19",
+            "total": "0:01",
+            "auto": "0:01",
+            "manual": "0:00",
+            "_total": 60
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:45",
+            "auto": "0:45",
+            "manual": "0:00",
+            "_total": 2700
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:04",
+            "auto": "0:04",
+            "manual": "0:00",
+            "_total": 240
+          },
+          {
+            "date": "2026-02-06",
+            "total": "0:22",
+            "auto": "0:22",
+            "manual": "0:00",
+            "_total": 1320
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:55",
+            "auto": "0:55",
+            "manual": "0:00",
+            "_total": 3300
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:32",
+            "auto": "4:32",
+            "manual": "0:00",
+            "_total": 16320
+          }
+        ],
+        "_totalSeconds": 23940
+      },
+      {
+        "userId": 28,
+        "userName": "Shahezad Shaikh",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "6:28",
+        "autoTime": "6:28",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-16",
+            "total": "0:27",
+            "auto": "0:27",
+            "manual": "0:00",
+            "_total": 1620
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:45",
+            "auto": "0:45",
+            "manual": "0:00",
+            "_total": 2700
+          },
+          {
+            "date": "2026-02-06",
+            "total": "0:03",
+            "auto": "0:03",
+            "manual": "0:00",
+            "_total": 180
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:38",
+            "auto": "0:38",
+            "manual": "0:00",
+            "_total": 2280
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:29",
+            "auto": "4:29",
+            "manual": "0:00",
+            "_total": 16140
+          },
+          {
+            "date": "2026-02-03",
+            "total": "0:01",
+            "auto": "0:01",
+            "manual": "0:00",
+            "_total": 60
+          },
+          {
+            "date": "2026-02-02",
+            "total": "0:05",
+            "auto": "0:05",
+            "manual": "0:00",
+            "_total": 300
+          }
+        ],
+        "_totalSeconds": 23280
+      },
+      {
+        "userId": 31,
+        "userName": "manisha Ramrakhyani",
+        "projectId": 32,
+        "projectName": "DinkumDoc Phase-2",
+        "totalTime": "6:19",
+        "autoTime": "6:19",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-24",
+            "total": "0:01",
+            "auto": "0:01",
+            "manual": "0:00",
+            "_total": 60
+          },
+          {
+            "date": "2026-02-06",
+            "total": "1:04",
+            "auto": "1:04",
+            "manual": "0:00",
+            "_total": 3840
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:28",
+            "auto": "0:28",
+            "manual": "0:00",
+            "_total": 1680
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:46",
+            "auto": "4:46",
+            "manual": "0:00",
+            "_total": 17160
+          }
+        ],
+        "_totalSeconds": 22740
+      },
+      {
+        "userId": 30,
+        "userName": "Ritesh Macwan",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "6:18",
+        "autoTime": "6:18",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-13",
+            "total": "0:45",
+            "auto": "0:45",
+            "manual": "0:00",
+            "_total": 2700
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:04",
+            "auto": "0:04",
+            "manual": "0:00",
+            "_total": 240
+          },
+          {
+            "date": "2026-02-06",
+            "total": "0:11",
+            "auto": "0:11",
+            "manual": "0:00",
+            "_total": 660
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:27",
+            "auto": "0:27",
+            "manual": "0:00",
+            "_total": 1620
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:51",
+            "auto": "4:51",
+            "manual": "0:00",
+            "_total": 17460
+          }
+        ],
+        "_totalSeconds": 22680
+      },
+      {
+        "userId": 25,
+        "userName": "Nikhil Fagwani",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "6:06",
+        "autoTime": "6:06",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-04",
+            "total": "4:15",
+            "auto": "4:15",
+            "manual": "0:00",
+            "_total": 15300
+          },
+          {
+            "date": "2026-02-03",
+            "total": "1:20",
+            "auto": "1:20",
+            "manual": "0:00",
+            "_total": 4800
+          },
+          {
+            "date": "2026-02-02",
+            "total": "0:31",
+            "auto": "0:31",
+            "manual": "0:00",
+            "_total": 1898
+          }
+        ],
+        "_totalSeconds": 21998
+      },
+      {
+        "userId": 27,
+        "userName": "Manali Tailor",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "6:04",
+        "autoTime": "6:04",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-26",
+            "total": "1:08",
+            "auto": "1:08",
+            "manual": "0:00",
+            "_total": 4080
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:04",
+            "auto": "0:04",
+            "manual": "0:00",
+            "_total": 240
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:35",
+            "auto": "0:35",
+            "manual": "0:00",
+            "_total": 2100
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:17",
+            "auto": "4:17",
+            "manual": "0:00",
+            "_total": 15420
+          }
+        ],
+        "_totalSeconds": 21840
+      },
+      {
+        "userId": 36,
+        "userName": "Viral Makwana",
+        "projectId": 74,
+        "projectName": "Happy Kamper",
+        "totalTime": "5:21",
+        "autoTime": "5:21",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-18",
+            "total": "0:11",
+            "auto": "0:11",
+            "manual": "0:00",
+            "_total": 660
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:03",
+            "auto": "0:03",
+            "manual": "0:00",
+            "_total": 180
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:07",
+            "auto": "0:07",
+            "manual": "0:00",
+            "_total": 420
+          },
+          {
+            "date": "2026-02-06",
+            "total": "0:16",
+            "auto": "0:16",
+            "manual": "0:00",
+            "_total": 960
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:29",
+            "auto": "0:29",
+            "manual": "0:00",
+            "_total": 1740
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:15",
+            "auto": "4:15",
+            "manual": "0:00",
+            "_total": 15300
+          }
+        ],
+        "_totalSeconds": 19260
+      },
+      {
+        "userId": 20,
+        "userName": "Smit Prajapati",
+        "projectId": 64,
+        "projectName": "HealthCare",
+        "totalTime": "5:06",
+        "autoTime": "5:06",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-06",
+            "total": "0:11",
+            "auto": "0:11",
+            "manual": "0:00",
+            "_total": 660
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:24",
+            "auto": "0:24",
+            "manual": "0:00",
+            "_total": 1440
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:31",
+            "auto": "4:31",
+            "manual": "0:00",
+            "_total": 16260
+          }
+        ],
+        "_totalSeconds": 18360
+      },
+      {
+        "userId": 46,
+        "userName": "Shivam Patel",
+        "projectId": 52,
+        "projectName": "Annaizu",
+        "totalTime": "4:59",
+        "autoTime": "4:59",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-17",
+            "total": "0:01",
+            "auto": "0:01",
+            "manual": "0:00",
+            "_total": 60
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:46",
+            "auto": "0:46",
+            "manual": "0:00",
+            "_total": 2760
+          },
+          {
+            "date": "2026-02-09",
+            "total": "0:06",
+            "auto": "0:06",
+            "manual": "0:00",
+            "_total": 360
+          },
+          {
+            "date": "2026-02-05",
+            "total": "0:14",
+            "auto": "0:14",
+            "manual": "0:00",
+            "_total": 840
+          },
+          {
+            "date": "2026-02-04",
+            "total": "3:52",
+            "auto": "3:52",
+            "manual": "0:00",
+            "_total": 13920
+          }
+        ],
+        "_totalSeconds": 17940
+      },
+      {
+        "userId": 9,
+        "userName": "Nirav Patel",
+        "projectId": 36,
+        "projectName": "Dash",
+        "totalTime": "4:34",
+        "autoTime": "4:34",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-05",
+            "total": "0:18",
+            "auto": "0:18",
+            "manual": "0:00",
+            "_total": 1080
+          },
+          {
+            "date": "2026-02-04",
+            "total": "4:16",
+            "auto": "4:16",
+            "manual": "0:00",
+            "_total": 15360
+          }
+        ],
+        "_totalSeconds": 16440
+      },
+      {
+        "userId": 23,
+        "userName": "Dineshkumar Prajapati",
+        "projectId": 68,
+        "projectName": "SAAYAM",
+        "totalTime": "3:42",
+        "autoTime": "3:42",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-04",
+            "total": "3:42",
+            "auto": "3:42",
+            "manual": "0:00",
+            "_total": 13320
+          }
+        ],
+        "_totalSeconds": 13320
+      },
+      {
+        "userId": 49,
+        "userName": "Pratik Rana",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "2:24",
+        "autoTime": "2:24",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-05",
+            "total": "0:14",
+            "auto": "0:14",
+            "manual": "0:00",
+            "_total": 840
+          },
+          {
+            "date": "2026-02-04",
+            "total": "2:10",
+            "auto": "2:10",
+            "manual": "0:00",
+            "_total": 7800
+          }
+        ],
+        "_totalSeconds": 8640
+      },
+      {
+        "userId": 22,
+        "userName": "Mukund Rana",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "2:23",
+        "autoTime": "2:23",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-16",
+            "total": "0:26",
+            "auto": "0:26",
+            "manual": "0:00",
+            "_total": 1560
+          },
+          {
+            "date": "2026-02-13",
+            "total": "0:45",
+            "auto": "0:45",
+            "manual": "0:00",
+            "_total": 2700
+          },
+          {
+            "date": "2026-02-04",
+            "total": "1:12",
+            "auto": "1:12",
+            "manual": "0:00",
+            "_total": 4320
+          }
+        ],
+        "_totalSeconds": 8580
+      },
+      {
+        "userId": 9,
+        "userName": "Nirav Patel",
+        "projectId": 2,
+        "projectName": "Test Project - 2",
+        "totalTime": "0:41",
+        "autoTime": "0:41",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-13",
+            "total": "0:41",
+            "auto": "0:41",
+            "manual": "0:00",
+            "_total": 2460
+          }
+        ],
+        "_totalSeconds": 2460
+      },
+      {
+        "userId": 17,
+        "userName": "Anurag Parekh",
+        "projectId": 64,
+        "projectName": "HealthCare",
+        "totalTime": "0:20",
+        "autoTime": "0:20",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-13",
+            "total": "0:20",
+            "auto": "0:20",
+            "manual": "0:00",
+            "_total": 1200
+          }
+        ],
+        "_totalSeconds": 1200
+      },
+      {
+        "userId": 18,
+        "userName": "Jatin",
+        "projectId": 64,
+        "projectName": "HealthCare",
+        "totalTime": "0:14",
+        "autoTime": "0:14",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-05",
+            "total": "0:14",
+            "auto": "0:14",
+            "manual": "0:00",
+            "_total": 840
+          }
+        ],
+        "_totalSeconds": 840
+      },
+      {
+        "userId": 23,
+        "userName": "Dineshkumar Prajapati",
+        "projectId": 66,
+        "projectName": "AAUTI AI Services",
+        "totalTime": "0:14",
+        "autoTime": "0:14",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-05",
+            "total": "0:14",
+            "auto": "0:14",
+            "manual": "0:00",
+            "_total": 840
+          }
+        ],
+        "_totalSeconds": 840
+      },
+      {
+        "userId": 27,
+        "userName": "Manali Tailor",
+        "projectId": 68,
+        "projectName": "SAAYAM",
+        "totalTime": "0:13",
+        "autoTime": "0:13",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-13",
+            "total": "0:13",
+            "auto": "0:13",
+            "manual": "0:00",
+            "_total": 780
+          }
+        ],
+        "_totalSeconds": 780
+      },
+      {
+        "userId": 26,
+        "userName": "Shruti Kapatel",
+        "projectId": 68,
+        "projectName": "SAAYAM",
+        "totalTime": "0:10",
+        "autoTime": "0:10",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-04",
+            "total": "0:10",
+            "auto": "0:10",
+            "manual": "0:00",
+            "_total": 600
+          }
+        ],
+        "_totalSeconds": 600
+      },
+      {
+        "userId": 44,
+        "userName": "Raj Desai",
+        "projectId": 52,
+        "projectName": "Annaizu",
+        "totalTime": "0:04",
+        "autoTime": "0:04",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-09",
+            "total": "0:04",
+            "auto": "0:04",
+            "manual": "0:00",
+            "_total": 240
+          }
+        ],
+        "_totalSeconds": 240
+      },
+      {
+        "userId": 8,
+        "userName": "Vraj Mehta",
+        "projectId": 2,
+        "projectName": "Test Project - 2",
+        "totalTime": "0:02",
+        "autoTime": "0:02",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-05",
+            "total": "0:02",
+            "auto": "0:02",
+            "manual": "0:00",
+            "_total": 120
+          }
+        ],
+        "_totalSeconds": 120
+      },
+      {
+        "userId": 47,
+        "userName": "Dhrutixa Patel",
+        "projectId": 52,
+        "projectName": "Annaizu",
+        "totalTime": "0:01",
+        "autoTime": "0:01",
+        "manualTime": "0:00",
+        "breakdown": [
+          {
+            "date": "2026-02-27",
+            "total": "0:01",
+            "auto": "0:01",
+            "manual": "0:00",
+            "_total": 60
+          }
+        ],
+        "_totalSeconds": 60
+      }
+    ],
+    "summary": {
+      "totalTime": "76:10",
+      "autoTime": "76:10",
+      "manualTime": "0:00",
+      "totalMembers": 19,
+      "totalProjects": 8
+    }
+  },
+  "pendingTotal": 1,
+  "inScopePendingCount": 1,
+  "approved": [],
+  "skipped": [
+    {
+      "id": 8,
+      "date": "2026-02-18",
+      "userId": 48,
+      "reason": "self-approval forbidden"
+    }
+  ],
+  "samplePendingKeys": [
+    "id",
+    "date",
+    "status",
+    "reason",
+    "requestedClockIn",
+    "requestedClockOut",
+    "requestedTotalHours",
+    "originalStatus",
+    "originalClockIn",
+    "originalClockOut",
+    "originalTotalHours",
+    "createdAt",
+    "userId",
+    "user",
+    "reviewedBy",
+    "reviewedAt",
+    "reviewNote",
+    "cancelledBy",
+    "cancelledAt"
+  ]
+}
