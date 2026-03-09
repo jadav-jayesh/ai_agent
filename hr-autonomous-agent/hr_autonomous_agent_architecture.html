@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HR Autonomous Agent Architecture</title>
+		<style>
+			:root {
+				--bg: #0b1220;
+				--bg-soft: #111b31;
+				--panel: rgba(255, 255, 255, 0.08);
+				--panel-solid: #ffffff;
+				--line: rgba(255, 255, 255, 0.14);
+				--text: #e8eefc;
+				--text-soft: #b7c4e2;
+				--ink: #162033;
+				--ink-soft: #5f6f8f;
+				--blue: #5b8cff;
+				--cyan: #6fe1ff;
+				--violet: #8e77ff;
+				--mint: #67e7c1;
+				--shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+				--radius: 22px;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+			html {
+				scroll-behavior: smooth;
+			}
+			body {
+				margin: 0;
+				font-family:
+					Inter,
+					ui-sans-serif,
+					system-ui,
+					-apple-system,
+					BlinkMacSystemFont,
+					"Segoe UI",
+					sans-serif;
+				color: var(--text);
+				background:
+					radial-gradient(
+						circle at top left,
+						rgba(91, 140, 255, 0.28),
+						transparent 26%
+					),
+					radial-gradient(
+						circle at 85% 10%,
+						rgba(111, 225, 255, 0.18),
+						transparent 24%
+					),
+					linear-gradient(160deg, #08101d 0%, #0d1730 45%, #121f38 100%);
+			}
+
+			.shell {
+				width: min(1180px, calc(100% - 32px));
+				margin: 26px auto 40px;
+			}
+
+			.topbar {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 16px;
+				padding: 16px 20px;
+				border: 1px solid var(--line);
+				background: rgba(10, 18, 33, 0.55);
+				backdrop-filter: blur(12px);
+				border-radius: 18px;
+				box-shadow: var(--shadow);
+				position: sticky;
+				top: 16px;
+				z-index: 10;
+			}
+
+			.brand {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				min-width: 0;
+			}
+
+			.brand-badge {
+				width: 42px;
+				height: 42px;
+				border-radius: 14px;
+				background: linear-gradient(
+					135deg,
+					var(--cyan),
+					var(--blue),
+					var(--violet)
+				);
+				box-shadow: 0 10px 28px rgba(91, 140, 255, 0.35);
+			}
+
+			.brand h1 {
+				margin: 0;
+				font-size: 16px;
+				font-weight: 700;
+				letter-spacing: 0.2px;
+			}
+
+			.brand p {
+				margin: 2px 0 0;
+				color: var(--text-soft);
+				font-size: 12px;
+			}
+
+			.nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+				justify-content: flex-end;
+			}
+
+			.nav a {
+				color: var(--text-soft);
+				text-decoration: none;
+				padding: 8px 12px;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.05);
+				border: 1px solid rgba(255, 255, 255, 0.06);
+				font-size: 13px;
+				transition: 0.2s ease;
+			}
+
+			.nav a:hover {
+				color: white;
+				background: rgba(91, 140, 255, 0.16);
+				border-color: rgba(111, 225, 255, 0.28);
+			}
+
+			.nav a.active {
+				color: white;
+				background: linear-gradient(
+					135deg,
+					rgba(91, 140, 255, 0.28),
+					rgba(111, 225, 255, 0.18)
+				);
+				border-color: rgba(111, 225, 255, 0.36);
+				box-shadow:
+					0 0 0 1px rgba(111, 225, 255, 0.08),
+					0 10px 24px rgba(91, 140, 255, 0.18);
+			}
+
+			.hero {
+				margin-top: 18px;
+				display: grid;
+				grid-template-columns: 1.2fr 0.8fr;
+				gap: 22px;
+				align-items: stretch;
+				scroll-margin-top: 110px;
+				padding: 0;
+				border: 0;
+				background: transparent;
+				box-shadow: none;
+				backdrop-filter: none;
+			}
+
+			.hero-main,
+			.hero-side,
+			.panel,
+			.metric,
+			.stage,
+			.card,
+			.callout {
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.06);
+				backdrop-filter: blur(12px);
+				box-shadow: var(--shadow);
+			}
+
+			.hero-main {
+				position: relative;
+				overflow: hidden;
+				border-radius: 30px;
+				padding: 42px;
+				min-height: 360px;
+			}
+
+			.hero-main::before,
+			.hero-main::after {
+				content: "";
+				position: absolute;
+				border-radius: 50%;
+				filter: blur(16px);
+				opacity: 0.7;
+			}
+
+			.hero-main::before {
+				width: 220px;
+				height: 220px;
+				top: -40px;
+				right: -10px;
+				background: radial-gradient(
+					circle,
+					rgba(111, 225, 255, 0.55),
+					transparent 65%
+				);
+			}
+
+			.hero-main::after {
+				width: 280px;
+				height: 280px;
+				bottom: -110px;
+				left: -70px;
+				background: radial-gradient(
+					circle,
+					rgba(142, 119, 255, 0.42),
+					transparent 70%
+				);
+			}
+
+			.eyebrow {
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				padding: 8px 14px;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.08);
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				color: var(--cyan);
+				font-size: 12px;
+				font-weight: 700;
+				letter-spacing: 0.4px;
+				text-transform: uppercase;
+			}
+
+			.hero h2 {
+				margin: 18px 0 14px;
+				font-size: clamp(34px, 4vw, 54px);
+				line-height: 1.02;
+				letter-spacing: -1.4px;
+				max-width: 11ch;
+			}
+
+			.hero p {
+				margin: 0;
+				max-width: 60ch;
+				color: var(--text-soft);
+				font-size: 16px;
+			}
+
+			.chips {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 10px;
+				margin-top: 22px;
+			}
+
+			.chip {
+				padding: 10px 14px;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.08);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				font-size: 13px;
+				color: #f4f7ff;
+			}
+
+			.hero-side {
+				border-radius: 28px;
+				padding: 22px;
+				display: grid;
+				gap: 14px;
+				align-content: start;
+			}
+
+			.metric-grid {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 12px;
+			}
+
+			.metric {
+				border-radius: 18px;
+				padding: 18px;
+			}
+
+			.metric .label {
+				font-size: 12px;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				color: var(--text-soft);
+				margin-bottom: 6px;
+			}
+
+			.metric .value {
+				font-size: 24px;
+				font-weight: 800;
+				color: white;
+			}
+
+			.mini-note {
+				padding: 16px 18px;
+				border-radius: 18px;
+				background: linear-gradient(
+					135deg,
+					rgba(91, 140, 255, 0.18),
+					rgba(103, 231, 193, 0.14)
+				);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				color: var(--text-soft);
+				font-size: 14px;
+				line-height: 1.6;
+			}
+
+			.section {
+				margin-top: 22px;
+				padding: 28px;
+				border-radius: 28px;
+				border: 1px solid var(--line);
+				background: rgba(255, 255, 255, 0.05);
+				backdrop-filter: blur(12px);
+				box-shadow: var(--shadow);
+				scroll-margin-top: 110px;
+				transition:
+					border-color 0.25s ease,
+					box-shadow 0.25s ease,
+					transform 0.25s ease;
+			}
+
+			.hero:target,
+			.section:target {
+				border-color: rgba(111, 225, 255, 0.42);
+				animation: sectionPulse 0.9s ease;
+			}
+
+			@keyframes sectionPulse {
+				0% {
+					transform: translateY(4px) scale(0.995);
+					box-shadow:
+						var(--shadow),
+						0 0 0 0 rgba(111, 225, 255, 0),
+						0 0 0 rgba(91, 140, 255, 0);
+				}
+				100% {
+					transform: translateY(0) scale(1);
+				}
+			}
+
+			.section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-end;
+				gap: 16px;
+				margin-bottom: 22px;
+			}
+
+			.section-header h3 {
+				margin: 0;
+				font-size: 28px;
+				letter-spacing: -0.6px;
+			}
+
+			.section-header p {
+				margin: 6px 0 0;
+				color: var(--text-soft);
+				max-width: 64ch;
+			}
+
+			.tag {
+				white-space: nowrap;
+				padding: 8px 12px;
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 0.08);
+				color: var(--cyan);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				font-size: 12px;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.4px;
+			}
+
+			.grid-3 {
+				display: grid;
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+				gap: 16px;
+			}
+
+			.grid-2 {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 18px;
+			}
+
+			.card {
+				border-radius: 22px;
+				padding: 20px;
+			}
+
+			.card h4 {
+				margin: 0 0 10px;
+				font-size: 18px;
+				color: white;
+			}
+
+			.card p,
+			.card li {
+				color: var(--text-soft);
+				font-size: 14px;
+			}
+
+			.card ul {
+				margin: 0;
+				padding-left: 18px;
+			}
+
+			.architecture {
+				display: grid;
+				gap: 18px;
+			}
+
+			.flow-row {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 14px;
+				flex-wrap: wrap;
+			}
+
+			.node {
+				min-width: 180px;
+				padding: 18px 16px;
+				border-radius: 20px;
+				text-align: center;
+				background: linear-gradient(
+					180deg,
+					rgba(255, 255, 255, 0.1),
+					rgba(255, 255, 255, 0.04)
+				);
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+			}
+
+			.node strong {
+				display: block;
+				color: white;
+				font-size: 15px;
+				margin-bottom: 4px;
+			}
+
+			.node span {
+				color: var(--text-soft);
+				font-size: 13px;
+			}
+
+			.arrow {
+				font-size: 24px;
+				color: var(--cyan);
+				opacity: 0.85;
+			}
+
+			.timeline {
+				display: grid;
+				gap: 14px;
+			}
+
+			.stage {
+				border-radius: 20px;
+				padding: 18px 18px 18px 20px;
+				display: grid;
+				grid-template-columns: 44px 1fr;
+				gap: 14px;
+				align-items: start;
+			}
+
+			.stage-index {
+				width: 44px;
+				height: 44px;
+				border-radius: 14px;
+				display: grid;
+				place-items: center;
+				font-weight: 800;
+				background: linear-gradient(135deg, var(--blue), var(--violet));
+				color: white;
+				box-shadow: 0 12px 26px rgba(91, 140, 255, 0.28);
+			}
+
+			.stage h4 {
+				margin: 2px 0 6px;
+				font-size: 17px;
+				color: white;
+			}
+
+			.stage p {
+				margin: 0;
+				color: var(--text-soft);
+				font-size: 14px;
+			}
+
+			.callout {
+				border-radius: 24px;
+				padding: 22px;
+				background: linear-gradient(
+					135deg,
+					rgba(91, 140, 255, 0.2),
+					rgba(111, 225, 255, 0.14)
+				);
+			}
+
+			.callout h4 {
+				margin: 0 0 10px;
+				color: white;
+				font-size: 18px;
+			}
+
+			.callout pre,
+			.mono-box {
+				margin: 0;
+				white-space: pre-wrap;
+				font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+				font-size: 12px;
+				line-height: 1.55;
+				color: #d8e6ff;
+				background: rgba(7, 13, 24, 0.42);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 18px;
+				padding: 18px;
+				overflow-x: auto;
+			}
+
+			.table-wrap {
+				overflow: hidden;
+				border-radius: 20px;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				color: var(--text-soft);
+				font-size: 14px;
+			}
+
+			th,
+			td {
+				padding: 14px 16px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+				vertical-align: top;
+			}
+
+			th {
+				text-align: left;
+				color: white;
+				background: rgba(255, 255, 255, 0.05);
+				font-weight: 700;
+			}
+
+			tr:last-child td {
+				border-bottom: 0;
+			}
+
+			.footer {
+				margin: 26px 0 8px;
+				text-align: center;
+				color: var(--text-soft);
+				font-size: 13px;
+			}
+
+			@media (max-width: 960px) {
+				.hero,
+				.grid-2,
+				.grid-3 {
+					grid-template-columns: 1fr;
+				}
+				.topbar {
+					position: static;
+				}
+				.section-header {
+					flex-direction: column;
+					align-items: flex-start;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="shell">
+			<header class="topbar">
+				<div class="brand">
+					<div class="brand-badge"></div>
+					<div>
+						<h1>HR Autonomous Agent</h1>
+						<p>Architecture overview and runtime operating model</p>
+					</div>
+				</div>
+				<nav class="nav">
+					<a href="#overview">Overview</a>
+					<a href="#architecture">Architecture</a>
+					<a href="#workflow">Workflow</a>
+					<a href="#guardrails">Guardrails</a>
+				</nav>
+			</header>
+
+			<section class="hero" id="overview">
+				<div class="hero-main">
+					<div class="eyebrow">Autonomous Operations Architecture</div>
+					<h2>Human-centered automation for HR decision workflows</h2>
+					<p>
+						The agent is built to understand requests from an HR operations
+						perspective first, then move through reasoning, discovery,
+						execution, recovery, and reflection with strong safety controls and
+						explicit verification.
+					</p>
+					<div class="chips">
+						<span class="chip">HR-first interpretation</span>
+						<span class="chip">Reason before action</span>
+						<span class="chip">Targeted discovery</span>
+						<span class="chip">Verified execution</span>
+						<span class="chip">Bounded recovery</span>
+						<span class="chip">Persistent reflection</span>
+					</div>
+				</div>
+
+				<aside class="hero-side">
+					<div class="metric-grid">
+						<div class="metric">
+							<div class="label">Core Stages</div>
+							<div class="value">5</div>
+						</div>
+						<div class="metric">
+							<div class="label">Retry Limit</div>
+							<div class="value">3</div>
+						</div>
+						<div class="metric">
+							<div class="label">Safety Mode</div>
+							<div class="value">On</div>
+						</div>
+						<div class="metric">
+							<div class="label">Flow Type</div>
+							<div class="value">Gated</div>
+						</div>
+					</div>
+					<div class="mini-note">
+						The operating model favors narrow actions, readable reasoning, and
+						explicit escalation over broad automation or speculative execution.
+					</div>
+				</aside>
+			</section>
+
+			<section class="section">
+				<div class="section-header">
+					<div>
+						<h3>Design Objectives</h3>
+						<p>
+							High-level goals that shape how the system interprets requests and
+							how it behaves under uncertainty.
+						</p>
+					</div>
+					<span class="tag">Intent + Safety</span>
+				</div>
+				<div class="grid-3">
+					<article class="card">
+						<h4>Business-first reasoning</h4>
+						<p>
+							Every request is translated into an HR outcome before it is
+							treated as a technical task.
+						</p>
+					</article>
+					<article class="card">
+						<h4>Fast startup</h4>
+						<p>
+							Warm context and configured startup behavior reduce unnecessary
+							discovery and shorten time to action.
+						</p>
+					</article>
+					<article class="card">
+						<h4>Measured execution</h4>
+						<p>
+							Actions are kept narrow, justified, and verified so the system
+							remains predictable and low risk.
+						</p>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="architecture">
+				<div class="section-header">
+					<div>
+						<h3>Architecture View</h3>
+						<p>
+							The system moves through a controlled chain of interpretation,
+							preparation, action, and learning.
+						</p>
+					</div>
+					<span class="tag">Structure</span>
+				</div>
+
+				<div class="architecture">
+					<div class="flow-row">
+						<div class="node">
+							<strong>User Goal</strong
+							><span>Business request enters the system</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Workflow Contract</strong
+							><span>Rules, strategy, and runtime defaults</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Warm Start</strong
+							><span>Known context and session preparation</span>
+						</div>
+					</div>
+					<div class="flow-row">
+						<div class="node">
+							<strong>Reasoning</strong><span>Classify and plan</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Discovery</strong><span>Refresh only needed facts</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Execution</strong
+							><span>Perform the smallest safe action</span>
+						</div>
+					</div>
+					<div class="flow-row">
+						<div class="node">
+							<strong>Verification</strong
+							><span>Confirm result and state change</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Recovery</strong><span>Retry only when justified</span>
+						</div>
+						<div class="arrow">→</div>
+						<div class="node">
+							<strong>Reflection</strong
+							><span>Store lessons and improve future runs</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<div class="section-header">
+					<div>
+						<h3>Core Components</h3>
+						<p>
+							Each layer has a focused role so the workflow remains explainable
+							and maintainable.
+						</p>
+					</div>
+					<span class="tag">Responsibilities</span>
+				</div>
+				<div class="table-wrap">
+					<table>
+						<tr>
+							<th>Component</th>
+							<th>Responsibility</th>
+						</tr>
+						<tr>
+							<td>Workflow Layer</td>
+							<td>
+								Defines the governing contract for how the agent behaves at
+								runtime.
+							</td>
+						</tr>
+						<tr>
+							<td>Configuration Layer</td>
+							<td>
+								Supplies startup behavior, assumptions, defaults, and safety
+								controls.
+							</td>
+						</tr>
+						<tr>
+							<td>Reasoning Agent</td>
+							<td>
+								Interprets intent, selects the most relevant business path, and
+								produces the execution plan.
+							</td>
+						</tr>
+						<tr>
+							<td>Discovery Agent</td>
+							<td>
+								Refreshes only the technical facts that are needed for the
+								active goal.
+							</td>
+						</tr>
+						<tr>
+							<td>Execution Agent</td>
+							<td>
+								Performs one justified action at a time and verifies the result
+								before moving forward.
+							</td>
+						</tr>
+						<tr>
+							<td>Recovery Agent</td>
+							<td>
+								Diagnoses failures, applies the narrowest safe correction, and
+								retries only when conditions support it.
+							</td>
+						</tr>
+						<tr>
+							<td>Reflection Agent</td>
+							<td>
+								Evaluates outcomes, captures lessons, and improves future
+								heuristics.
+							</td>
+						</tr>
+					</table>
+				</div>
+			</section>
+
+			<section class="section" id="workflow">
+				<div class="section-header">
+					<div>
+						<h3>Runtime Workflow</h3>
+						<p>
+							The runtime path is intentionally gated so each stage provides
+							evidence for the next one.
+						</p>
+					</div>
+					<span class="tag">Execution Path</span>
+				</div>
+				<div class="timeline">
+					<article class="stage">
+						<div class="stage-index">1</div>
+						<div>
+							<h4>Interpret the goal</h4>
+							<p>
+								The system receives a user objective and frames it in HR
+								business terms.
+							</p>
+						</div>
+					</article>
+					<article class="stage">
+						<div class="stage-index">2</div>
+						<div>
+							<h4>Prepare the environment</h4>
+							<p>
+								Warm state, known context, and session readiness are checked
+								before any task execution begins.
+							</p>
+						</div>
+					</article>
+					<article class="stage">
+						<div class="stage-index">3</div>
+						<div>
+							<h4>Reason and inspect</h4>
+							<p>
+								The agent identifies relevant business areas and refreshes only
+								the technical facts required for this run.
+							</p>
+						</div>
+					</article>
+					<article class="stage">
+						<div class="stage-index">4</div>
+						<div>
+							<h4>Execute and verify</h4>
+							<p>
+								The smallest justified action is performed, and the result is
+								checked immediately.
+							</p>
+						</div>
+					</article>
+					<article class="stage">
+						<div class="stage-index">5</div>
+						<div>
+							<h4>Recover and reflect</h4>
+							<p>
+								If failure occurs, recovery is attempted conservatively; after
+								completion, lessons are recorded for future runs.
+							</p>
+						</div>
+					</article>
+				</div>
+			</section>
+
+			<section class="section">
+				<div class="grid-2">
+					<div class="callout">
+						<h4>Confidence Model</h4>
+						<ul>
+							<li>
+								<strong>High:</strong> business meaning, module, and action path
+								are all supported.
+							</li>
+							<li>
+								<strong>Medium:</strong> proceed only with narrow and reversible
+								actions plus explicit verification.
+							</li>
+							<li>
+								<strong>Low:</strong> inspect further or escalate instead of
+								guessing.
+							</li>
+						</ul>
+					</div>
+					<div class="callout">
+						<h4>Example Reasoning Snapshot</h4>
+						<pre>
+Goal: approve pending attendance requests for last week
+Task Type: attendance operations
+Confidence: Medium
+Relevant Areas: attendance, approval flow, authentication
+Action Path: authenticate -> confirm scope ->
+             approve eligible requests -> verify</pre
+						>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="guardrails">
+				<div class="section-header">
+					<div>
+						<h3>Operating Profile and Guardrails</h3>
+						<p>
+							Runtime defaults and recovery rules are designed to keep the agent
+							effective while limiting operational risk.
+						</p>
+					</div>
+					<span class="tag">Control Surface</span>
+				</div>
+				<div class="grid-2">
+					<article class="card">
+						<h4>Configured profile</h4>
+						<ul>
+							<li>Default persona: HR operations specialist</li>
+							<li>Interpretation mode: business-operation-first</li>
+							<li>Warm-start behavior enabled</li>
+							<li>Authentication required before execution</li>
+							<li>Reflection required after terminal outcomes</li>
+						</ul>
+					</article>
+					<article class="card">
+						<h4>Risk controls</h4>
+						<ul>
+							<li>Prefer read-only verification before write actions</li>
+							<li>Avoid broad or bulk changes unless explicitly justified</li>
+							<li>Retry only when recovery is meaningful and safe</li>
+							<li>
+								Escalate when evidence conflicts or confidence remains low
+							</li>
+						</ul>
+					</article>
+				</div>
+			</section>
+
+			<div class="footer">HR Autonomous Agent architecture overview</div>
+		</div>
+
+		<script>
+			const navLinks = [...document.querySelectorAll(".nav a")];
+			const sections = navLinks
+				.map((link) => document.querySelector(link.getAttribute("href")))
+				.filter(Boolean);
+
+			const setActiveLink = (id) => {
+				navLinks.forEach((link) => {
+					const active = link.getAttribute("href") === `#${id}`;
+					link.classList.toggle("active", active);
+					if (active) {
+						link.setAttribute("aria-current", "page");
+					} else {
+						link.removeAttribute("aria-current");
+					}
+				});
+			};
+
+			const observer = new IntersectionObserver(
+				(entries) => {
+					const visible = entries
+						.filter((entry) => entry.isIntersecting)
+						.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+					if (visible.length > 0) {
+						setActiveLink(visible[0].target.id);
+					}
+				},
+				{
+					rootMargin: "-20% 0px -55% 0px",
+					threshold: [0.2, 0.35, 0.5, 0.7],
+				},
+			);
+
+			sections.forEach((section) => observer.observe(section));
+
+			navLinks.forEach((link) => {
+				link.addEventListener("click", () => {
+					const targetId = link.getAttribute("href").slice(1);
+					setActiveLink(targetId);
+				});
+			});
+
+			const initialId = window.location.hash?.slice(1) || sections[0]?.id;
+			if (initialId) setActiveLink(initialId);
+		</script>
+	</body>
+</html>
