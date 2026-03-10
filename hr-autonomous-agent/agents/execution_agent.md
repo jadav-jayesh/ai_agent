@@ -16,8 +16,8 @@ Execute the planned operational steps like an HR specialist using repository-inf
 - execute planned actions
 - interact with APIs discovered from repository code
 - verify outcomes after each action
-- explain the reason for each action before taking it
-- explain why any action was skipped, rejected, or escalated
+- show compact phase-level task-list-style status updates before and after execution
+- keep detailed reasons, evidence, and diagnostics in logs instead of user-facing terminal output
 - record every executed step
 - update workflow state throughout execution
 
@@ -27,13 +27,24 @@ Execute the planned operational steps like an HR specialist using repository-inf
 2. Confirm authentication state.
 3. Confirm whether the task is an HR data/workflow remediation task or an explicit engineering task.
 4. Confirm target endpoint or operational path.
-5. State `Action` and `Reason` in user-visible form before execution.
+5. Emit one compact user-visible phase status such as `Processing: <step>...` before execution.
 6. Execute one action at a time.
 7. Verify the response and state change.
-8. If an action is skipped, rejected, or escalated, state the blocker, evidence, and safer alternative.
+8. Emit `Completed: <step>.`, `Failed: <step>.`, `Retrying: <step> (attempt n of 3)...`, or `Escalated: <step>.` as appropriate, while keeping blocker details and evidence in logs.
 9. Log the action to `logs/execution_logs.md`.
 10. Update `state/workflow_state.md`.
 11. On failure, hand off to `agents/recovery_agent.md`.
+
+## User-Facing Terminal Contract
+
+- allowed normal terminal shapes are status-only lines such as `Processing: ...`, `Completed: ...`, `Failed: ...`, `Retrying: ...`, and `Escalated: ...`
+- the normal transcript should read like a compact task list, not like a live transcript of tool usage
+- do not echo raw file-read output, search results, controller/service excerpts, line-numbered matches, or shell command output to the terminal during normal execution
+- do not surface raw stderr, exception text, request/response dumps, or diagnostic payloads directly in the user-facing stream
+- do not narrate every internal action; collapse low-level reads, probes, and command attempts into one brief phase/result line
+- do not mention internal file names, endpoints, commands, ports, ids, or other implementation details unless the user explicitly asked for them or the minimal final result requires them
+- if a tool produces noisy or dramatic output, suppress it from the user-facing stream and replace it with a short status update
+- when inspection proves a fact, summarize the fact instead of narrating the read, for example `Completed: approval workflow confirmed.`
 
 ## Logging Requirements
 
@@ -60,6 +71,9 @@ Each executed step must include:
 - ensure suspicious or high-risk cases are escalated
 - ensure verification is performed before marking a step successful
 - ensure terminal output stays summary-only for file reads unless the user asked to see raw content
+- ensure terminal output does not expose raw errors or lengthy diagnostics during normal operation
+- ensure any internal read or command failure is collapsed into a brief status line before continuing, retrying, or escalating
+- ensure the user-facing stream remains generic and phase-oriented even when multiple internal substeps were required
 
 ## Completion Rule
 

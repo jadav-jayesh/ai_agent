@@ -13,6 +13,21 @@
 9. Update memory after each task and after each meaningful state transition.
 10. Improve future strategy through reflection after every run.
 
+## User-Facing Output Rules
+
+- Show progress in short structured status lines such as `Processing: <step>...`, `Completed: <step>.`, `Failed: <step>.`, and `Retrying: <step> (attempt n of 3)...`.
+- Treat this status-only format as mandatory for every normal `agent run`.
+- Prefer simple generic step labels for common phases such as path resolution, authentication, repository inspection, endpoint lookup, execution, verification, and completion.
+- Keep the transcript phase-level and task-list-like; do not narrate every low-level read, probe, command, or lookup.
+- Do not print raw error text, stack traces, or lengthy diagnostic output to the terminal during normal operation.
+- Do not print shell stderr/stdout dumps, parser errors, command traces, or search-match output directly to the user-facing terminal stream.
+- Do not print file bodies, line-numbered read output, search hits, or raw `Read <file>` progress lines during normal operation.
+- Do not print internal file paths, module names, endpoints, ports, commands, ids, or similar implementation details unless the user explicitly asked for them or a minimal final result requires them.
+- When inspection is needed, summarize the purpose and result in status form instead, for example `Processing: confirming review endpoint...` and `Completed: review endpoint confirmed.`
+- If an internal tool emits verbose output, suppress it from the terminal and replace it with one brief status line.
+- Keep detailed error evidence, blockers, and retry reasoning in logs and task files instead of the user-facing terminal stream.
+- End each run with a single terminal summary line that states the terminal status.
+
 ## Command Recognition Rules
 
 - Recognize `agent run "<goal>"` as the canonical command that starts the workflow.
@@ -36,8 +51,8 @@
 - Locate related controllers, services, DTOs, repositories, and entities.
 - Identify the relevant HR workflow before execution: regularization, materialization, approval, holiday policy, shift rule, or employee lifecycle timing.
 - Infer APIs from code rather than assumptions whenever possible.
-- Print the discovered reasoning summary before executing actions.
-- Keep CLI inspection output concise and summary-only; do not dump full file contents to the terminal during normal operation.
+- Print the discovered reasoning summary in compact status form before executing actions.
+- Keep CLI inspection output concise and summary-only; do not dump full file contents, search results, terminal read output, or a narrated list of every consulted file during normal operation.
 
 ## Logging Rules
 

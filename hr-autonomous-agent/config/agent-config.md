@@ -37,7 +37,12 @@
 - Preferred Inspection Targets: `controllers`, `services`, `repositories`, `entities`, `dtos`
 - Retry Limit: `3`
 - Require Pre-Execution Reasoning Output: `true`
-- CLI File Read Visibility: `summary-only`
+- CLI Status Style: `structured-short-status`
+- CLI File Read Visibility: `summary-only-no-read-dumps`
+- CLI Error Visibility: `status-only-no-raw-error-dumps`
+- CLI Allowed User-Facing Statuses: `Processing`, `Completed`, `Failed`, `Retrying`, `Escalated`
+- CLI Disallowed User-Facing Content: `file bodies`, `search hits`, `line dumps`, `raw Read messages`, `stdout/stderr dumps`, `stack traces`, `exception text`
+- Final Status Summary Required: `true`
 - Require Action Reason Before Execution: `true`
 - Require Explicit Escalation Reason: `true`
 - Update Memory After Each Task: `true`
@@ -60,6 +65,7 @@
 - When the TCP probe succeeds, authenticate immediately and use `Auth Verification Endpoint` to confirm the acting session before deeper discovery.
 - Reuse the warm-cache files when the configured target still matches; refresh only the module knowledge required by the goal.
 - Keep terminal output summary-only during file inspection unless the user explicitly asks to see file contents.
+- Collapse tool-level read/error output into compact status messages in the normal terminal stream and store exact details only in logs/task artifacts.
 - Interpret user requests in HR domain terms before treating them as engineering requests.
 - If the target repository structure changes, update paths here rather than changing agent logic files.
 - If the backend exposes a different auth path or port, update this file and rerun discovery.

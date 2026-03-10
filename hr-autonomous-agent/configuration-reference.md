@@ -81,7 +81,10 @@ The runtime is optimized for **HR business operations first**, not developer-fir
 | Preferred Inspection Targets | `controllers`, `services`, `repositories`, `entities`, `dtos` |
 | Retry Limit | `3` |
 | Pre-Execution Reasoning Output Required | `true` |
+| CLI Status Style | `structured-short-task-list-status` |
 | CLI File Read Visibility | `summary-only` |
+| CLI Error Visibility | `hidden-from-user-facing-output` |
+| Final Status Summary Required | `true` |
 | Require Action Reason Before Execution | `true` |
 | Require Explicit Escalation Reason | `true` |
 | Update Memory After Each Task | `true` |
@@ -138,15 +141,24 @@ The configured boot workflow is sequential and explicit:
 
 ### Required user-visible execution style
 
-Before execution, the runtime should print a concise reasoning summary such as:
+The runtime should present user-facing progress as short structured status lines instead of verbose reasoning or raw errors.
 
-- what it analyzed
-- which modules/files are relevant
-- which APIs or service paths were inferred
-- the plan
-- the reason for the next action
+The normal user-facing stream should read like a compact task list of major phases, not a transcript of every internal read, command, or retry detail.
 
-During execution, each step must state both **Action** and **Reason**. If the agent skips, rejects, or escalates, it must also state the blocker, evidence, and safer alternative.
+Recommended examples:
+
+- `Processing: locating repository path...`
+- `Completed: repository path located.`
+- `Processing: authenticating session...`
+- `Failed: authentication step failed.`
+- `Retrying: authentication step (attempt 2 of 3)...`
+- `Completed: task completed.`
+
+Detailed reasons, evidence, and exact error text should remain in logs and task artifacts, not in the normal terminal output.
+
+The normal terminal output should also suppress raw file-read traces, search hits, line dumps, shell stderr/stdout, and parser errors; those details belong in logs, not in the user-facing stream.
+
+It should also avoid mentioning internal file paths, endpoints, commands, ports, ids, and other implementation detail unless the operator explicitly asks for that level of detail.
 
 ## 6. Agent Role Configuration
 

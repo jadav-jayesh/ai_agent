@@ -78,7 +78,7 @@ When `agent run "<goal>"` is executed, the runtime must perform the following se
 14. Perform only the minimum repository discovery needed for the goal and write the results to `context/system_map.md`.
 15. Perform targeted code inspection to identify relevant modules, source files, workflows, and likely APIs.
 16. Produce reasoning output in `tasks/reasoning_output.md`.
-17. Print concise reasoning and decision reasons to the CLI before executing any mutating action.
+17. Print concise structured status updates to the CLI before and during execution, while keeping detailed evidence in logs and task files.
 18. Execute the plan using discovered APIs and repository knowledge.
 19. Log all actions to `logs/execution_logs.md`.
 20. Detect failures, analyze root causes, and retry up to 3 times using `agents/recovery_agent.md`.
@@ -122,7 +122,7 @@ When `agent run "<goal>"` is executed, the runtime must perform the following se
 
 ### 4. System Analysis and Code Inspection
 
-Before executing a task, the runtime must inspect relevant code and print reasoning to the CLI.
+Before executing a task, the runtime must inspect relevant code and print only compact reasoning status to the CLI.
 
 The inspection must include:
 
@@ -136,8 +136,13 @@ The inspection must include:
 The CLI output for inspection must stay summary-only:
 
 - list file paths or module names when needed
+- prefer generic phase labels over implementation narration whenever the task can still be understood without naming internal files or modules
 - do not print raw file contents into the terminal unless the user explicitly asks for them or a failure diagnosis requires a short excerpt
-- prefer one-line summaries such as `Read <file> to confirm <fact>` over echoing the file body
+- do not echo line dumps, search hits, terminal tool output, or raw `Read <file>` progress lines during normal execution
+- do not narrate every read, probe, lookup, or verification step individually; collapse low-level work into one short phase summary
+- do not surface internal paths, endpoints, ports, commands, ids, or configuration details in normal CLI output unless the user explicitly asked for them or a minimal final result truly requires one short identifier
+- prefer one-line business summaries such as `Processing: confirming approval endpoint...` over file-oriented narration
+- if a low-level read, search, or command produces verbose output, convert it into one brief status line instead of forwarding the raw output
 
 ### 5. Reasoning Workflow
 
@@ -175,21 +180,43 @@ The CLI output for inspection must stay summary-only:
 
 ## CLI Reasoning Output Requirement
 
-Before execution, the runtime must present a concise explanation in this style:
+Before and during execution, the runtime must use compact structured task-list-style status lines instead of verbose reasoning dumps.
 
-1. `Analyzing repository...`
-2. `Detected <module>.`
-3. `Relevant files: <file list>.`
-4. `Inferred APIs: <api list>.`
-5. `Plan: <numbered steps>.`
-6. `Reason for next action: <why this is the smallest justified step>.`
-7. `Proceeding with execution...`
+The user-facing terminal stream is a status channel, not a debugging channel.
 
-During execution, every user-visible step must follow this shape:
+The allowed normal transcript is only:
 
-- `Action: <what the runtime is doing>`
-- `Reason: <why this action is justified now>`
-- `If skipping/rejecting/escalating: Reason: <exact blocker>, Evidence: <supporting fact>, Safer alternative: <what was chosen instead>`
+- one short line when a major phase starts
+- one short line when that phase completes, fails, retries, or escalates
+- one final terminal summary line for the run
+
+Preferred user-visible status shapes:
+
+1. `Processing: locating repository path...`
+2. `Completed: repository path located.`
+3. `Processing: authenticating session...`
+4. `Completed: authentication successful.`
+5. `Processing: identifying relevant module and path...`
+6. `Completed: relevant module identified.`
+7. `Processing: executing task step...`
+8. `Retrying: task step (attempt 2 of 3)...`
+9. `Failed: authentication step failed.`
+10. `Completed: task completed.`
+
+User-visible terminal output must stay summary-only:
+
+- do not print raw errors, stack traces, exception text, or long request/response dumps in normal CLI output
+- do not echo full file contents during normal operation
+- do not echo terminal tool stderr/stdout, shell parser errors, grep/search output, or command diagnostics directly to the user-facing stream
+- do not show read traces such as file bodies, search-match dumps, line-numbered excerpts, or internal `Read <file>` actions unless the user explicitly asked to inspect those contents
+- do not list every internal action taken; summarize low-level work as one business-facing phase/result line
+- do not mention internal file paths, module names, endpoints, commands, ports, ids, or other implementation details unless the user explicitly asked for that level of detail
+- do not forward dramatic or noisy tool output even when a command fails; log the exact details and collapse the user-facing message to a brief status line
+- keep detailed evidence, exact error text, and diagnostics in `logs/failure_logs.md`, `logs/execution_logs.md`, and task files instead
+- if a failure occurs, show only the affected step and status, for example `Failed: locate target endpoint.`
+- if a retry occurs, show only the step and retry count, for example `Retrying: authenticate session (attempt 2 of 3)...`
+- if inspection succeeds, show only a short purpose/result summary such as `Completed: approval workflow confirmed.`
+- end every run with one terminal summary line such as `Completed: <task>.`, `Failed: <task>.`, or `Escalated: <task>.`
 
 ## Safety and Escalation
 

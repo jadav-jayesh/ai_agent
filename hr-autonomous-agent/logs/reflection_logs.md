@@ -67,3 +67,27 @@ This file stores reflections, historical summaries, and strategy improvement not
 - Strategy Improvements: when auth returns an active device id, retry with that device before considering force-login; for approval runs, always perform a second scoped queue check so skipped records are explained concretely
 - Future Warnings: do not approve a pending request owned by the acting reviewer; do not widen the date scope beyond the previous calendar month without user approval
 - Historical Summary: authenticated as HR user `48` in org `2`, generated the February 2026 tracked-hours report, approved four pending February requests, and left the one `2026-02-18` self-owned request pending because the service forbids self-approval
+
+### Run ID: `run-20260310-last-month-approvals-self-blocked`
+
+- Goal: approve pending requests for the last month for my org
+- Result: safe escalation with no mutation because the only remaining in-scope pending request was self-owned by the acting reviewer
+- What Worked: warm-starting from cached module knowledge; recovering backend startup with the exact npm script form; confirming controller, service, and UI review paths before querying the live queue; saving a live queue artifact for verification
+- What Failed: the configured backend start command in `agent-config.md` did not match npm's required script invocation form
+- Root Causes: port `4000` was initially down; config used `npm start:dev` instead of `npm run start:dev`; the only remaining February request was id `8` for user `48`, and `attendance.service.ts` blocks `regularization.userId === reviewer.id`
+- Confidence Review: confidence is high because the live backend was started, auth resolved to HR user `48` in org `2`, the pending queue was fetched directly, and service inspection matched the observed self-approval-safe stop condition
+- Strategy Improvements: for approval-only runs, verify whether the residual queue is entirely self-owned before preparing any mutation helper; when startup commands fail, prefer npm's exact suggested script form as the first recovery step
+- Future Warnings: do not attempt to review request `8` as acting user `48`; do not treat the presence of a pending request as sufficient reason to mutate unless reviewer ownership also permits it
+- Historical Summary: after backend recovery and targeted code inspection, the live February 2026 queue showed only one pending request left for org `2`; because it belonged to the acting HR user, the run stopped in a documented safe escalation rather than issuing a forbidden approval call
+
+### Run ID: `run-20260310-last-month-regularization-approvals-completed`
+
+- Goal: approve pending reguarlization requests for last month
+- Result: completed with two approved in-scope pending requests and one explicit self-approval-safe residual skip
+- What Worked: probing and starting the backend only when needed; confirming the queue and review APIs from code before mutation; authenticating as the configured HR actor; re-checking the queue immediately after approval
+- What Failed: nothing at the application workflow level; the only residual pending request remained intentionally blocked by the self-approval rule
+- Root Causes: the live February queue had three pending requests, but one belonged to the acting reviewer and therefore could not be touched safely under `SELF_APPROVAL_NOT_ALLOWED`
+- Confidence Review: confidence is high because the live queue was fetched directly, two `PATCH /review` approvals succeeded, and the immediate re-check confirmed the exact residual state
+- Strategy Improvements: for repeated approval runs, use the fresh pending queue as the source of truth even if the prior workflow state ended in escalation; treat a residual self-owned request as a verified safe stop only after approvable non-self requests have been cleared
+- Future Warnings: do not attempt to review request `8` as acting user `48`; do not broaden approval scope outside the requested previous calendar month without user direction
+- Historical Summary: authenticated as HR user `48` in org `2`, inspected the February 2026 pending queue, approved ids `15` and `14` for user `2`, and verified that only self-owned id `8` remained pending after the run

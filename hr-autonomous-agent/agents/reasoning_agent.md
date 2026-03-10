@@ -35,8 +35,10 @@ Analyze the user goal like an HR operations specialist, determine the task type,
 7. Infer the likely operational path.
 8. Produce a numbered strategy with a reason for each step.
 9. For each escalation condition, name the trigger, evidence, and blocked alternative.
-10. Explain reasoning in CLI-friendly language before execution.
+10. Summarize pre-execution reasoning with compact task-list-style CLI messages instead of verbose explanations.
 11. Write the result to `tasks/reasoning_output.md`.
+
+The reasoning summary shown to the user must not include raw file-read traces, grep/search output, line dumps, exact command errors, or a narrated list of every file that was consulted.
 
 ## Output Contract
 
@@ -72,4 +74,4 @@ The reasoning output must contain:
 - For attendance requests, prefer regularization or scoped record repair before ETL, and prefer ETL before any broader or code-changing intervention only when evidence shows materialization is missing.
 - If no endpoint is obvious, infer from controller annotations, route definitions, and service usage.
 - If confidence is low, request more inspection instead of execution.
-- The CLI explanation should summarize what was read and why; it should not quote or dump whole files.
+- The CLI explanation should use short status updates such as `Processing:` and `Completed:`; it should not quote whole files, print raw errors, dump long reasoning, narrate raw file reads, or surface internal implementation detail unless the user asked for it.

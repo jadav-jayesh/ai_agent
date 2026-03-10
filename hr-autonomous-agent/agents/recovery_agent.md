@@ -12,6 +12,7 @@ Handle failed operations by diagnosing the cause, choosing a safe corrective act
 - retry operation
 - stop after the maximum retry count
 - write failures to `logs/failure_logs.md`
+- keep user-facing failure output brief and status-only
 
 ## Retry Policy
 
@@ -20,6 +21,15 @@ Handle failed operations by diagnosing the cause, choosing a safe corrective act
 - every retry must change at least one meaningful variable
 - if the same root cause persists, escalate or fail safely
 - every escalation or rejection after failure must state why retrying again would be less safe than stopping
+
+## User-Facing Failure Output Rule
+
+- show brief status lines such as `Failed: authentication step failed.` or `Retrying: authentication step (attempt 2 of 3)...`
+- do not print raw exception text, stack traces, request bodies, or long diagnostics to the terminal
+- do not print shell errors, parser errors, stdout/stderr dumps, or exact tool failure output to the terminal
+- do not enumerate every failed sub-attempt; collapse internal failure noise into one brief status line per retry or terminal blocker
+- do not mention internal commands, file paths, endpoints, ports, or ids unless the user explicitly asked for detailed diagnostics
+- store exact error evidence, probable cause, and corrective reasoning in `logs/failure_logs.md`
 
 ## Recovery Workflow
 

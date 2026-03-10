@@ -152,3 +152,100 @@ This file stores step-by-step execution logs for all runs.
 - Result: success
 - Next Action: record completion in workflow memory and reflection artifacts
 - Decision Notes: the remaining pending request was intentionally left unchanged as the safest compliant outcome
+
+### Run ID: `run-20260310-last-month-approvals-self-blocked`
+
+#### Step `1`
+
+- Timestamp: `2026-03-10`
+- Action: inspect configured target, probe backend, and recover startup
+- Reason: approval work depends on a live backend and the smallest safe environment change is to start only the configured service when the port is down
+- Target: `C:\Users\DELL\Desktop\Work_Projects\Groovy%20Webwork\modern-admin\backend`
+- Request Summary: verify repo/backend path, probe `127.0.0.1:4000`, attempt configured startup, and retry only if the startup command format is wrong
+- Response Summary: configured repo and backend path existed; port `4000` was closed; `npm start:dev` failed with `Unknown command: "start:dev"`; retrying with `npm run start:dev` brought the Nest backend up successfully
+- Result: success after recovery
+- Next Action: inspect auth and regularization review code before live mutation
+- Decision Notes: recovered by following npm's suggested script form instead of broadening the startup change
+
+#### Step `2`
+
+- Timestamp: `2026-03-10`
+- Action: inspect auth and regularization review flow
+- Reason: the run must confirm the exact approval endpoints and reviewer constraints before touching pending requests
+- Target: auth module, attendance controller/service, and regularization review UI
+- Request Summary: confirm `POST /auth/login`, `GET /auth/token-details`, `GET /hrms/attendance/regularizations`, `PATCH /review`, and the self-approval block plus approval side effect
+- Response Summary: controller and UI confirmed the pending queue and review patch path; service inspection confirmed `reviewRegularization(...)` blocks `regularization.userId === reviewer.id` and approval triggers `recalcUserDateRange(userId, date, date)`
+- Result: success
+- Next Action: authenticate and inspect the live pending queue for last-month scope
+
+#### Step `3`
+
+- Timestamp: `2026-03-10`
+- Action: authenticate acting org and query last-month pending regularizations
+- Reason: live queue inspection is the smallest justified step that can determine whether any approval is still possible
+- Target: org `2`, dates `2026-02-01` through `2026-02-28`
+- Request Summary: log in via `/auth/login` as the configured HR actor, resolve `/auth/token-details`, fetch all `PENDING` regularizations, filter to last month, and save `tasks/live_last_month_regularization_result.json`
+- Response Summary: acting role resolved to `hr` user `48` in org `2`; live pending queue contained exactly `1` in-scope last-month request: id `8` for user `48` on `2026-02-18`; there were no approvable non-self last-month requests
+- Result: success
+- Next Action: stop before mutation and record the safe escalation
+
+#### Step `4`
+
+- Timestamp: `2026-03-10`
+- Action: finalize safe escalation
+- Reason: the only remaining in-scope request is self-owned by the acting reviewer, and the inspected service forbids self-approval
+- Target: request id `8`, acting reviewer `48`, workflow and memory artifacts
+- Request Summary: determine whether any supported last-month approval action remains without violating the reviewer guardrail
+- Response Summary: no safe approval remained because the live queue only contained self-owned request `8` dated `2026-02-18`, and service logic throws `SELF_APPROVAL_NOT_ALLOWED` when `regularization.userId === reviewer.id`
+- Result: escalated
+- Next Action: record reflection and await user direction if a different reviewer or scope is intended
+- Decision Notes: the request was intentionally left pending as the safest compliant outcome
+
+### Run ID: `run-20260310-last-month-regularization-approvals-completed`
+
+#### Step `1`
+
+- Timestamp: `2026-03-10`
+- Action: verify configured target, probe backend, and start the service
+- Reason: the approval APIs require a live backend and starting only the configured service is the smallest justified environment change
+- Target: `C:\Users\DELL\Desktop\Work_Projects\Groovy%20Webwork\modern-admin\backend`
+- Request Summary: confirm repo/backend path, probe `127.0.0.1:4000`, and start the backend with `npm run start:dev` when the port is down
+- Response Summary: configured repo and backend path existed; port `4000` was initially closed; `npm run start:dev` brought the Nest backend up successfully
+- Result: success
+- Next Action: inspect auth and regularization review code before live mutation
+- Decision Notes: no broader recovery was needed because the configured backend started cleanly
+
+#### Step `2`
+
+- Timestamp: `2026-03-10`
+- Action: inspect auth and regularization review flow
+- Reason: the run must confirm the exact approval endpoints, response shapes, and reviewer constraints before touching pending requests
+- Target: auth module, attendance controller/service, and regularization review UI
+- Request Summary: confirm `POST /auth/login`, `GET /auth/token-details`, `GET /hrms/attendance/regularizations`, `PATCH /review`, the `{ data, meta }` queue shape, and the self-approval guard plus approval side effect
+- Response Summary: controller, service, and UI inspection confirmed the pending queue and review patch path; service inspection confirmed `reviewRegularization(...)` blocks `regularization.userId === reviewer.id` and approval triggers `recalcUserDateRange(userId, date, date)`
+- Result: success
+- Next Action: authenticate and inspect the live pending queue for February 2026 scope
+
+#### Step `3`
+
+- Timestamp: `2026-03-10`
+- Action: authenticate acting org and query last-month pending regularizations
+- Reason: live queue inspection is the smallest justified step that can identify which requests can be approved safely
+- Target: org `2`, dates `2026-02-01` through `2026-02-28`
+- Request Summary: log in via `/auth/login`, resolve `/auth/token-details`, fetch all `PENDING` regularizations page-by-page, filter to the requested month, and update `tasks/live_last_month_regularization_result.json`
+- Response Summary: acting role resolved to `hr` user `48` in org `2`; live pending queue contained `3` in-scope February requests: ids `15` and `14` for user `2`, plus self-owned id `8` for user `48`
+- Result: success
+- Next Action: approve only ids `15` and `14`, then re-check the queue
+- Decision Notes: id `8` was excluded from mutation up front because the service forbids self-approval
+
+#### Step `4`
+
+- Timestamp: `2026-03-10`
+- Action: approve in-scope non-self pending regularizations and verify residual queue state
+- Reason: ids `15` and `14` were the only live non-self `PENDING` requests inside the user-requested month and org scope
+- Target: request ids `15` and `14`, with residual verification for id `8`
+- Request Summary: patch ids `15` and `14` with `APPROVE`, re-fetch the pending queue, and verify that only self-owned residual requests remain
+- Response Summary: ids `15` and `14` were approved successfully; the immediate re-check showed `pendingTotal=1`, `inScopeTotal=1`, `approvedCount=2`, and the only remaining request was self-owned id `8` on `2026-02-18`
+- Result: success
+- Next Action: record completion, reflection, and the safe residual skip in workflow memory
+- Decision Notes: id `8` was intentionally left pending because the service blocks self-approval for acting user `48`

@@ -67,5 +67,8 @@ No execution step may begin until repository discovery has produced a current `c
 
 ## CLI Output Rule
 
-- Report discovery progress as short summaries such as `Read system_map cache to confirm repo path`.
+- Report discovery progress as short status lines such as `Processing: locating repository path...` and `Completed: repository path located.`
+- Use the same brief format for backend checks and auth prerequisites, such as `Processing: checking backend availability...`.
+- If discovery fails, show only a compact line such as `Failed: repository discovery step failed.` and keep detailed evidence in logs.
 - Do not echo raw file contents from inspected files into the terminal during discovery.
+- Do not echo search results, path dumps, line-numbered excerpts, or raw `Read <file>` actions into the terminal during discovery.

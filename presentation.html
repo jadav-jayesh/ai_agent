@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Autonomous Agent | Product Presentation</title>
+  <style>
+    :root{--bg:#080611;--bg2:#120f26;--panel:rgba(17,16,38,.78);--panel2:rgba(27,22,58,.72);--text:#f8fbff;--muted:#b5bfdc;--accent:#8b5cf6;--accent2:#22d3ee;--accent3:#fb7185;--accent4:#f59e0b;--stroke:rgba(255,255,255,.1);--shadow:0 24px 70px rgba(1,2,10,.42)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 12% 18%,rgba(34,211,238,.18),transparent 24%),radial-gradient(circle at 85% 18%,rgba(251,113,133,.16),transparent 22%),radial-gradient(circle at 55% 82%,rgba(139,92,246,.18),transparent 25%),linear-gradient(135deg,#05040c 0%,#0b1021 38%,#120f26 68%,#06070d 100%);color:var(--text);overflow-x:hidden}
+    body::before,body::after{content:"";position:fixed;inset:auto;pointer-events:none;filter:blur(78px);opacity:.42;z-index:0}.app{position:relative;z-index:1}
+    body::before{top:2rem;left:-5rem;width:16rem;height:16rem;background:#22d3ee}body::after{bottom:2rem;right:-4rem;width:15rem;height:15rem;background:#fb7185}
+    .deck{height:100vh;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth}.deck::-webkit-scrollbar{display:none}.slide{min-width:100vw;height:100vh;padding:34px 5vw 72px;display:grid;align-items:center;scroll-snap-align:start;position:relative;flex:0 0 100vw}
+    .shell{width:min(1120px,100%);margin:0 auto}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:.38rem .72rem;border-radius:999px;background:linear-gradient(90deg,rgba(245,158,11,.16),rgba(251,113,133,.16));border:1px solid rgba(251,191,36,.24);color:#ffe4a8;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center}.hero h2{font-size:clamp(2.4rem,5vw,4.4rem);line-height:.94;margin:14px 0 16px;letter-spacing:-.045em}.hero p{font-size:.98rem;line-height:1.58;color:var(--muted);max-width:58ch;margin:0}
+    .gradient{background:linear-gradient(135deg,#fff7ed 0%,#67e8f9 38%,#c084fc 68%,#fb7185 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.muted{color:var(--muted)}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:rgba(34,211,238,.12);color:#bef8ff;padding:.14rem .38rem;border-radius:8px}
+    .chip-row,.stat-row,.card-grid,.impact-grid,.proof-grid,.role-grid{display:grid;gap:12px}
+    .panel{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--stroke);border-radius:24px;padding:20px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+    .chip-row{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px}.chip{padding:14px 15px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09)}.chip strong{display:block;font-size:.96rem;margin-bottom:4px}.chip span{color:var(--muted);font-size:.84rem;line-height:1.45}
+    .stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:18px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1)}.stat b{display:block;font-size:2rem;margin-bottom:4px;background:linear-gradient(135deg,#fff,#67e8f9 55%,#fda4af);-webkit-background-clip:text;background-clip:text;color:transparent}.stat small{display:block;color:var(--muted);font-size:.83rem;line-height:1.42}
+    .section-head{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:end;margin-bottom:18px}.section-head h3{font-size:clamp(1.8rem,3.8vw,2.7rem);margin:8px 0 4px;line-height:1.02}.section-head p{color:var(--muted);max-width:56ch;line-height:1.52;margin:0;font-size:.93rem}
+    .card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.card,.metric,.proof,.role,.timeline-step{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:18px}.card h4,.role h4,.proof h4,.metric h4{margin:0 0 8px;font-size:.98rem}.card p,.metric p,.proof p,.role p,.timeline-step p{color:var(--muted);line-height:1.5;margin:0;font-size:.86rem}
+    .timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.timeline-step{position:relative;padding-top:46px}.timeline-step::before{content:attr(data-step);position:absolute;top:14px;left:16px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent2),var(--accent));font-size:.76rem;font-weight:800;box-shadow:0 10px 24px rgba(34,211,238,.22)}
+    .role-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.role .tag{display:inline-block;padding:.28rem .56rem;border-radius:999px;background:rgba(139,92,246,.18);color:#e9d5ff;font-size:.7rem;margin-bottom:8px}
+    .architecture{display:grid;grid-template-columns:1.06fr .94fr;gap:14px}.flow{display:grid;gap:10px}.flow-node{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);position:relative;font-size:.88rem}.flow-node:not(:last-child)::after{content:"↓";position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);color:#67e8f9;font-size:1rem}
+    .proof-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.proof ul{margin:8px 0 0;padding-left:16px;color:var(--muted);font-size:.84rem}.proof li{margin:5px 0;line-height:1.38}.impact-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.metric b{font-size:1.55rem;display:block;margin-bottom:6px;color:#fff}
+    .quote{padding:18px 20px;border-left:4px solid var(--accent4);background:linear-gradient(90deg,rgba(245,158,11,.1),rgba(251,113,133,.08));border-radius:20px}.quote p{margin:0;color:#fff2d8;font-size:.96rem;line-height:1.58}.stack{display:grid;gap:12px}.list{list-style:none;display:grid;gap:8px;margin:10px 0 0;padding:0}.list li{position:relative;padding-left:14px;color:var(--muted);font-size:.84rem;line-height:1.42}.list li::before{content:'';position:absolute;left:0;top:.43rem;width:6px;height:6px;border-radius:50%;background:var(--accent2)}.tone-warm{background:linear-gradient(180deg,rgba(239,68,68,.08),rgba(245,158,11,.05));border-color:rgba(245,158,11,.22)}.tone-cool{background:linear-gradient(180deg,rgba(34,211,238,.08),rgba(139,92,246,.06));border-color:rgba(34,211,238,.2)}.footnote{margin-top:10px;color:var(--muted);font-size:.78rem;line-height:1.4}
+    .controls{position:fixed;right:18px;bottom:18px;display:flex;gap:10px;z-index:25}.arrow{width:52px;height:52px;border:none;border-radius:50%;background:linear-gradient(135deg,rgba(34,211,238,.18),rgba(139,92,246,.18));color:#fff;font-size:1.35rem;backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);cursor:pointer;display:grid;place-items:center;box-shadow:0 16px 38px rgba(0,0,0,.28)}.arrow:disabled{opacity:.35;cursor:default}
+    .progress{position:fixed;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.08);z-index:24;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent4),var(--accent2),var(--accent),var(--accent3));box-shadow:0 0 24px rgba(34,211,238,.5);transition:width .45s ease}
+    .accent-line{height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,.75),rgba(34,211,238,.75),rgba(251,113,133,.75),transparent);margin:12px 0 20px}
+    @media (max-width:1100px){.hero,.architecture,.timeline,.role-grid,.impact-grid,.proof-grid,.card-grid,.section-head{grid-template-columns:1fr 1fr}.chip-row{grid-template-columns:1fr}.shell{width:min(1040px,100%)}}
+    @media (max-width:760px){.slide{padding:28px 18px 72px}.hero,.architecture,.timeline,.role-grid,.impact-grid,.proof-grid,.card-grid,.stat-row,.section-head{grid-template-columns:1fr}.hero h2{font-size:2.35rem}.chip-row{margin-top:12px}.controls{right:10px;bottom:12px}.arrow{width:46px;height:46px}.panel,.card,.metric,.proof,.role,.timeline-step,.chip,.stat{padding:15px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <main class="deck" id="deck">
+      <section class="slide" id="cover">
+        <div class="shell hero">
+          <div>
+            <span class="eyebrow">HR Operations • Autonomous Workflow</span>
+            <h2><span class="gradient">HR Autonomous Agent</span><br />for HR operations.</h2>
+            <p>HR Autonomous Agent is a workflow system for general HR operations, handling repetitive actions with safe scope control, live verification, and a clear audit trail—turning manual process work into fast, verified execution.</p>
+            <div class="chip-row">
+              <div class="chip"><strong>Real workflow</strong><span>Built for repeatable HR operations such as request handling, exception resolution, and verified follow-up.</span></div>
+              <div class="chip"><strong>Measured savings</strong><span>Shows manual time, agent time, and total time saved clearly.</span></div>
+              <div class="chip"><strong>Autonomous run</strong><span>Interprets, executes, verifies, recovers, and logs in one flow.</span></div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="stat-row">
+              <div class="stat"><b>6 → 1</b><small>example request-handling path: about <strong>5 minutes saved</strong> per request.</small></div>
+              <div class="stat"><b>25 → 5</b><small>example issue-resolution path: about <strong>20 minutes saved</strong> per incident.</small></div>
+              <div class="stat"><b>2–4+</b><small>hours saved per week at moderate request volume.</small></div>
+              <div class="stat"><b>5</b><small>specialist execution stages: interpret, discover, execute, recover, reflect.</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="problem">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Problem</span>
+              <h3>Manual HR operations still consume valuable time</h3>
+            </div>
+            <p>Across HR operations, routine approvals, exception handling, corrections, and follow-up checks are rule-based tasks, but they still require repeated checking, repeated decision-making, and repeated verification when done manually.</p>
+          </div>
+          <div class="impact-grid">
+            <article class="metric"><h4>Request handling</h4><b>Repeated triage</b><p>Pending HR requests must be opened, checked, decided, refreshed, and verified manually.</p></article>
+            <article class="metric"><h4>Issue resolution</h4><b>Cross-check effort</b><p>Corrections require validation across stored data, API output, and current state.</p></article>
+            <article class="metric"><h4>Audit follow-up</h4><b>Traceability gap</b><p>Teams often reconstruct what changed only after the action is already done.</p></article>
+            <article class="metric"><h4>Operational drag</h4><b>Manual repetition</b><p>Small but frequent HR tasks accumulate into hours of avoidable effort every week.</p></article>
+          </div>
+          <div class="panel" style="margin-top:18px">
+            <div class="card-grid">
+              <article class="card"><h4>Example: request review</h4><p><strong>Manual:</strong> ~6 minutes<br /><strong>HR Autonomous Agent:</strong> ~1 minute<br /><strong>Time saved:</strong> ~5 minutes each.</p></article>
+              <article class="card"><h4>Example: issue resolution</h4><p><strong>Manual:</strong> ~25 minutes<br /><strong>HR Autonomous Agent:</strong> ~5 minutes<br /><strong>Time saved:</strong> ~20 minutes each.</p></article>
+              <article class="card"><h4>Weekly return</h4><p>Across recurring HR tasks, HR Autonomous Agent returns roughly <strong>2–4+ hours every week</strong> at moderate workflow volume.</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="before-after">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Before vs After</span>
+              <h3>Manual flow versus HR Autonomous Agent</h3>
+            </div>
+            <p>The value is simple: across general HR operations, the same business result is achieved with fewer touchpoints, less waiting, and a verified outcome at the end of the run.</p>
+          </div>
+          <div class="architecture">
+            <div class="panel tone-warm">
+              <h4>Before: manual workflow</h4>
+              <ul class="list">
+                <li>Open the queue and inspect pending items one by one.</li>
+                <li>Check ownership, context, and current request state.</li>
+                <li>Apply approval or correction manually.</li>
+                <li>Refresh the queue and verify what remains.</li>
+                <li>Rebuild the audit trail later if someone asks.</li>
+              </ul>
+              <p class="footnote"><strong>Example timings:</strong> ~6 minutes for request review and ~25 minutes for issue resolution when done manually.</p>
+            </div>
+            <div class="panel tone-cool">
+              <h4>After: HR Autonomous Agent</h4>
+              <ul class="list">
+                <li>Authenticate and confirm the correct workflow path.</li>
+                <li>Read the current in-scope state automatically.</li>
+                <li>Apply the action in a controlled sequence.</li>
+                <li>Verify the result immediately after execution.</li>
+                <li>Leave logs, workflow state, and reflection behind.</li>
+              </ul>
+              <p class="footnote"><strong>Example timings:</strong> ~1 minute for request review and ~5 minutes for issue resolution with HR Autonomous Agent.</p>
+            </div>
+          </div>
+          <div style="margin-top:18px" class="panel quote"><p>Example time saved: about <strong>5 minutes per request-handling workflow</strong> and about <strong>20 minutes per issue-resolution workflow</strong>.</p></div>
+        </div>
+      </section>
+
+      <section class="slide" id="autonomy">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Autonomous Flow</span>
+              <h3>HR Autonomous Agent thinks, decides, acts, and verifies</h3>
+            </div>
+            <p>HR Autonomous Agent is not a one-click macro. It is a multi-step execution loop that understands the workflow, inspects live state, acts with scope control, and validates the final result.</p>
+          </div>
+          <div class="timeline">
+            <div class="timeline-step" data-step="1"><h4>Interpret</h4><p>Translate the request into the correct HR workflow.</p></div>
+            <div class="timeline-step" data-step="2"><h4>Discover</h4><p>Inspect only the modules, endpoints, and state needed for the task.</p></div>
+            <div class="timeline-step" data-step="3"><h4>Execute</h4><p>Run the in-scope action one step at a time.</p></div>
+            <div class="timeline-step" data-step="4"><h4>Recover</h4><p>Retry safely with scoped correction or escalate if needed.</p></div>
+            <div class="timeline-step" data-step="5"><h4>Reflect</h4><p>Record what happened so future runs improve.</p></div>
+          </div>
+          <div class="card-grid" style="margin-top:18px">
+            <article class="card"><h4>End-to-end</h4><p>Once the goal is provided, the workflow proceeds without hand-holding.</p></article>
+            <article class="card"><h4>Verified</h4><p>Every action is followed by a post-run confirmation step.</p></article>
+            <article class="card"><h4>Auditable</h4><p>Logs, state, and reflection make each run easy to inspect later.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="capabilities">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Capabilities</span>
+              <h3>What HR Autonomous Agent handles today</h3>
+            </div>
+            <p>The current implementation is aimed at repeatable HR operations that have clear rules, known system paths, and a verifiable end state, starting with high-frequency workflows already validated in the product.</p>
+          </div>
+          <div class="card-grid">
+            <article class="card"><h4>Request handling</h4><p>Reads pending items, respects safe scope, applies actions, and verifies the queue afterward.</p></article>
+            <article class="card"><h4>Issue resolution</h4><p>Repairs scoped HR issues, rechecks the data, and confirms the corrected result.</p></article>
+            <article class="card"><h4>Audit-ready execution</h4><p>Leaves behind the reasoning path, action trail, and outcome verification for traceability.</p></article>
+          </div>
+          <div class="impact-grid" style="margin-top:18px">
+            <article class="metric"><h4>Scope control</h4><b>Safe actions</b><p>Confirms in-scope items before any mutation.</p></article>
+            <article class="metric"><h4>Verification</h4><b>Post-check built in</b><p>Rechecks the result after execution instead of assuming success.</p></article>
+            <article class="metric"><h4>Recovery</h4><b>Graceful retries</b><p>Handles failure with scoped correction and bounded retry logic.</p></article>
+            <article class="metric"><h4>Memory</h4><b>Learns from runs</b><p>Captures patterns that improve future execution quality.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="proof">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Validated Evidence</span>
+              <h3>Proven on live workflow paths</h3>
+            </div>
+            <p>HR Autonomous Agent already shows verified execution across approvals, issue correction, route confirmation, and safe-skip behavior when action should not be taken.</p>
+          </div>
+          <div class="proof-grid">
+            <article class="proof"><h4>Request approvals completed</h4><p>A live run approved two in-scope pending requests and rechecked the queue afterward.</p><ul><li>Approved IDs: <strong>15</strong> and <strong>14</strong></li><li>Self-owned request <strong>8</strong> stayed pending</li><li>Post-action verification confirmed the result</li></ul></article>
+            <article class="proof"><h4>Issue repair validated</h4><p>An org-scoped HR issue was repaired and verified after remediation.</p><ul><li>Scoped repair instead of global mutation</li><li>Resolved a false timezone mismatch</li><li>Rechecked DB and API output</li></ul></article>
+            <article class="proof"><h4>Governance held</h4><p>The run path confirmed endpoints first and rejected unsafe alternatives.</p><ul><li>No blind bulk operations</li><li>No raw error dumping</li><li>Retries capped at three</li></ul></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="impact">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Impact</span>
+              <h3>Time saved is visible and easy to explain</h3>
+            </div>
+            <p>The clearest way to understand the value of HR Autonomous Agent is to compare the manual path with the autonomous path side by side.</p>
+          </div>
+          <div class="impact-grid">
+            <article class="metric"><h4>Request workflow</h4><b>6 min → 1 min</b><p>About <strong>5 minutes saved</strong> for each request reviewed and completed.</p></article>
+            <article class="metric"><h4>Issue workflow</h4><b>25 min → 5 min</b><p>About <strong>20 minutes saved</strong> for each incident corrected and verified.</p></article>
+            <article class="metric"><h4>Weekly effect</h4><b>2–4+ hrs saved</b><p>Time returned to the team every week at moderate workflow volume.</p></article>
+            <article class="metric"><h4>Operational quality</h4><b>Fewer manual steps</b><p>Less repetition, faster closure, and better auditability.</p></article>
+          </div>
+          <div class="panel" style="margin-top:18px">
+            <div class="card-grid">
+              <article class="card"><h4>Manual path</h4><p>Open → inspect → decide → apply → refresh → verify.</p></article>
+              <article class="card"><h4>Agent path</h4><p>Read → validate scope → act → verify → log.</p></article>
+              <article class="card"><h4>Net result</h4><p>The same business outcome is reached faster, with less risk and clearer traceability.</p></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="scale">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Scale</span>
+              <h3>Where HR Autonomous Agent creates leverage</h3>
+            </div>
+            <p>The strongest fit is for high-frequency HR workflows where the rules are clear and the result can be checked immediately after execution.</p>
+          </div>
+          <div class="architecture">
+            <div class="panel">
+              <h4>Current workflow fit</h4>
+              <ul class="list">
+                <li>Request review and approval workflows.</li>
+                <li>Issue repair and verification workflows.</li>
+                <li>Queue refresh and residual pending-item checks.</li>
+                <li>Audit-friendly logging of each executed action.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h4>Next logical extensions</h4>
+              <ul class="list">
+                <li>Leave, shift, and tracked-hours follow-up.</li>
+                <li>Exception handling for recurring HR edge cases.</li>
+                <li>Approval workflows that need safe scope filtering.</li>
+                <li>Operational reporting and reconciliation support.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" id="closing">
+        <div class="shell">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Foundation</span>
+              <h3>Built to be fast, safe, and operationally credible</h3>
+            </div>
+            <p>HR Autonomous Agent combines workflow understanding, scoped execution, verification, and reflection inside a controlled architecture that is already grounded in the current application stack.</p>
+          </div>
+          <div class="card-grid">
+            <article class="card"><h4>Known stack</h4><p>NestJS backend, React frontend, verified auth paths, and mapped workflow routes.</p></article>
+            <article class="card"><h4>Safe operating model</h4><p>Warm start, auth confirmation, scoped action, post-check, and bounded recovery.</p></article>
+            <article class="card"><h4>Core outcome</h4><p>HR Autonomous Agent shortens turnaround time and saves measurable operational effort.</p></article>
+          </div>
+          <div style="margin-top:18px" class="panel quote"><p><strong>Manual vs agent examples:</strong> <strong>6 min → 1 min</strong> for a request workflow and <strong>25 min → 5 min</strong> for an issue-resolution workflow—saving time on every run.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="controls">
+      <button class="arrow" id="prev" aria-label="Previous slide">←</button>
+      <button class="arrow" id="nextBtn" aria-label="Next slide">→</button>
+    </div>
+    <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = [...document.querySelectorAll('.slide')];
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressFill = document.getElementById('progressFill');
+    let current = 0;
+    const update = i => {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+    };
+    const go = i => slides[Math.max(0, Math.min(slides.length - 1, i))].scrollIntoView({behavior:'smooth', inline:'start', block:'nearest'});
+    prevBtn.addEventListener('click', () => go(current - 1));
+    nextBtn.addEventListener('click', () => go(current + 1));
+    document.addEventListener('keydown', e => {
+      if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(current + 1)}
+      if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(current - 1)}
+      if(e.key === 'Home'){go(0)}
+      if(e.key === 'End'){go(slides.length - 1)}
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if(entry.isIntersecting) update(slides.indexOf(entry.target)); });
+    }, {root: deck, threshold: .6});
+    slides.forEach(slide => observer.observe(slide));
+    update(0);
+  </script>
+</body>
+</html>

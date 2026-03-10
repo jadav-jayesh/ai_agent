@@ -74,9 +74,13 @@ Execution policy:
 
 Decision communication policy:
 
-- for each action, say what is being done and why it is the best current step
-- for each skipped or rejected action, say what was not done and why it was rejected
-- for each escalation, state the exact trigger, the evidence, and the safer alternative that prevented the escalation from becoming a guess
+- for each action, show a short task-list-style message such as `Processing: authenticating session...` or `Completed: authentication successful.`
+- keep terminal communication at the phase level; do not narrate every read, probe, command, or verification substep
+- for each skipped, failed, or retried action, keep the terminal message brief and put the detailed reasoning in logs
+- for each escalation, show a compact terminal status and keep the exact trigger, evidence, and safer alternative in the recorded artifacts
+- never treat the terminal as a debug transcript; suppress raw read traces, search output, exact error dumps, and noisy tool output from the normal user-facing stream
+- avoid mentioning internal files, endpoints, commands, ports, or ids in the normal terminal flow unless the user explicitly asks for implementation detail
+- when code inspection is required, summarize what was confirmed rather than narrating file reads or echoing tool output
 
 ## Failure Strategy
 

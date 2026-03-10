@@ -22,6 +22,20 @@ This file stores failed operations, retry reasoning, and recovery outcomes.
 
 ## Failures
 
+### Run ID: `run-20260310-last-month-approvals-self-blocked`
+
+#### Failed Step `1`
+
+- Timestamp: `2026-03-10`
+- Current Task: `environment preparation`
+- Retry Attempt: `1`
+- Error Evidence: configured startup command `npm start:dev` returned `Unknown command: "start:dev"` and npm suggested `npm run start:dev`
+- Probable Cause: the configuration stored the package script name without npm's required `run` prefix
+- Proposed Fix: retry the startup with `npm run start:dev`
+- Retry Decision: retry with corrected script invocation
+- Retry or Escalation Reason: npm provided an exact low-risk correction, so retrying with the script form was safer than broad environment changes
+- Outcome: backend started successfully and the run continued
+
 ### Run ID: `run-20260308-attendance-past-week-proper-flow`
 
 #### Failed Step `4`
